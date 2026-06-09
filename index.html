@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#020609">
+<title>ASFAN · Field Observer v1</title>
+<style>
+:root{
+  --bg0:#020609;--bg1:#040d14;--bg2:#071a24;--bg3:#0b2030;
+  --g:#00e587;--c:#00c4ff;--o:#ff7040;--r:#ff3355;--y:#ffd060;
+  --txt:#9dd8b0;--dim:#1e5030;--bdr:#0a2218;
+  --f:'Courier New',Consolas,Menlo,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg0)}
+body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;color:var(--txt)}
+
+/* STATUS BAR */
+#sb{background:var(--bg1);border-bottom:1px solid var(--bdr);padding:3px 8px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:10px;letter-spacing:.07em;flex-shrink:0;height:24px}
+.si{display:flex;align-items:center;gap:3px}
+.si em{color:var(--dim);font-style:normal}
+
+/* GPS BAR */
+#gb{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:3px 8px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:10px;letter-spacing:.05em;flex-shrink:0;height:24px;overflow:hidden}
+#g-coord{color:var(--c);font-weight:bold}
+#g-meta{color:var(--dim)}
+
+/* CAMERA */
+#cw{flex:1;position:relative;background:#000;overflow:hidden;min-height:0}
+#vid{width:100%;height:100%;object-fit:cover;display:block}
+#oc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#fl{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .07s}
+#nocam{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;color:var(--dim);
+  font-size:11px;letter-spacing:.1em;gap:10px;pointer-events:none}
+#nocam .big{font-size:44px}
+.sl{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--g),transparent);
+  animation:scan 5s linear infinite;pointer-events:none;opacity:.3}
+@keyframes scan{from{top:-2px}to{top:100%}}
+#rb{position:absolute;top:8px;left:8px;background:rgba(255,0,0,.85);
+  color:#fff;font-size:9px;letter-spacing:.12em;padding:2px 7px;display:none}
+#rb.on{display:block}
+#nfcb{position:absolute;top:8px;right:8px;background:rgba(0,229,135,.12);
+  border:1px solid var(--g);color:var(--g);font-size:9px;
+  letter-spacing:.1em;padding:2px 7px;display:none}
+#nfcb.on{display:block}
+#qrb{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(0,0,0,.8);
+  border:1px solid var(--c);color:var(--c);font-size:10px;
+  padding:4px 8px;display:none;word-break:break-all}
+#qrb.on{display:block}
+
+/* PANELS */
+#pn{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);
+  background:var(--bdr);gap:1px;flex-shrink:0;height:100px}
+.pnl{background:var(--bg2);padding:5px 6px;display:flex;flex-direction:column;
+  gap:1px;overflow:hidden}
+.pt{font-size:8px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;flex-shrink:0}
+.pv{font-size:14px;font-weight:bold;color:#fff;line-height:1.15;flex-shrink:0}
+.ps{font-size:9px;color:var(--dim);line-height:1.3;flex-shrink:0}
+.pc{width:100%;flex:1;min-height:0;display:block}
+
+/* NOTES */
+#nb{background:var(--bg1);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);
+  padding:4px 8px;display:flex;align-items:center;gap:8px;flex-shrink:0;height:30px}
+#nt{flex:1;background:transparent;border:none;color:var(--txt);
+  font-family:var(--f);font-size:11px;outline:none;caret-color:var(--g)}
+#nt::placeholder{color:var(--dim)}
+#db{background:none;border:none;color:var(--dim);cursor:pointer;font-size:15px;
+  padding:0;transition:color .1s;flex-shrink:0}
+#db.on{color:var(--r)}
+
+/* ACTION BAR */
+#ab{background:var(--bg1);border-top:1px solid var(--bdr);padding:5px 3px;
+  display:flex;justify-content:space-around;gap:3px;flex-shrink:0}
+.ab{flex:1;background:var(--bg3);border:1px solid var(--bdr);color:var(--txt);
+  font-family:var(--f);font-size:8px;letter-spacing:.05em;cursor:pointer;
+  border-radius:2px;display:flex;flex-direction:column;align-items:center;
+  gap:2px;padding:5px 0;user-select:none;transition:background .1s,color .1s}
+.ab:active,.ab.on{background:var(--g);color:#000;border-color:var(--g)}
+.ab.ron.on{background:var(--r);color:#fff;border-color:var(--r)}
+.ab.oon.on{background:var(--o);color:#000;border-color:var(--o)}
+.ab.yon.on{background:var(--y);color:#000;border-color:var(--y)}
+.ab .ic{font-size:16px;line-height:1}
+
+/* ARCHIVE */
+#ar{position:fixed;inset:0;background:var(--bg0);z-index:500;display:none;flex-direction:column}
+#ar.on{display:flex}
+#ar-h{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:8px 12px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11px;letter-spacing:.1em;flex-shrink:0}
+#ar-h button{background:none;border:none;color:var(--o);font-size:18px;cursor:pointer}
+#ar-l{flex:1;overflow-y:auto;padding:6px}
+.rec{background:var(--bg2);border:1px solid var(--bdr);padding:8px 10px;margin-bottom:5px;font-size:10px}
+.rts{color:var(--g);letter-spacing:.06em}
+.rpos{color:var(--c);margin-top:2px}
+.raz{color:var(--dim);margin-top:2px}
+.rnt{color:var(--txt);margin-top:3px}
+.rbt{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.rbt button{background:var(--bg3);border:1px solid var(--bdr);
+  color:var(--txt);font-family:var(--f);font-size:9px;
+  padding:3px 8px;cursor:pointer;letter-spacing:.05em}
+.rbt button:active{background:var(--g);color:#000}
+
+/* TOAST */
+#ts{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);
+  background:var(--g);color:#000;padding:6px 18px;font-size:10px;
+  letter-spacing:.1em;border-radius:2px;opacity:0;pointer-events:none;
+  transition:opacity .3s;z-index:600;white-space:nowrap}
+#ts.on{opacity:1}
+
+/* FULL PHOTO VIEWER */
+#pv{position:fixed;inset:0;background:#000;z-index:700;display:none;align-items:center;justify-content:center}
+#pv.on{display:flex}
+#pv img{max-width:100%;max-height:100%}
+#pv-close{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.7);
+  border:1px solid var(--g);color:var(--g);font-size:20px;cursor:pointer;
+  padding:4px 10px;font-family:var(--f)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:2px}
+::-webkit-scrollbar-thumb{background:var(--g)}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.blink{animation:blink .7s infinite}
+</style>
+</head>
+<body>
+
+<!-- STATUS BAR -->
+<div id="sb">
+  <div class="si"><span id="s-time">--:--:--</span></div>
+  <div style="display:flex;gap:9px">
+    <div class="si"><em>💡</em><span id="s-lux">---</span><em style="font-size:9px">lx</em></div>
+    <div class="si"><em>📶</em><span id="s-net">---</span></div>
+    <div class="si"><span id="s-wl" title="Wake Lock">💤</span></div>
+    <div class="si"><span id="s-bi">🔋</span><span id="s-bat">--%</span></div>
+  </div>
+</div>
+
+<!-- GPS BAR -->
+<div id="gb">
+  <span id="g-coord">GPS: inițializare...</span>
+  <span id="g-meta"></span>
+</div>
+
+<!-- SPLASH -->
+<div id="splash" style="
+  position:fixed;inset:0;background:var(--bg0);z-index:900;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding:20px;">
+  <div style="font-size:48px">🔭</div>
+  <div style="font-size:12px;letter-spacing:.25em;color:var(--g)">ASFAN FIELD OBSERVER</div>
+  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1 · offline · ro</div>
+
+  <!-- PROTOCOL WARNING (afișat dinamic) -->
+  <div id="sp-warn" style="display:none;background:#1a0a00;border:1px solid var(--o);
+    color:var(--o);font-size:10px;padding:10px 14px;max-width:300px;text-align:center;
+    letter-spacing:.05em;line-height:1.6;border-radius:2px;"></div>
+
+  <button id="btn-all" onclick="activateAll()" style="
+    background:var(--g);color:#000;border:none;font-family:var(--f);
+    font-size:12px;letter-spacing:.2em;padding:14px 32px;
+    cursor:pointer;border-radius:2px;margin-top:4px;">
+    ▶ ACTIVARE COMPLETĂ
+  </button>
+
+  <div id="sp-st" style="font-size:9px;color:var(--dim);letter-spacing:.07em;
+    min-height:14px;text-align:center;max-width:300px;line-height:1.6;"></div>
+
+  <!-- INSTRUCȚIUNI RESET PERMISIUNI (ascunse implicit) -->
+  <div id="sp-help" style="display:none;background:var(--bg3);border:1px solid var(--bdr);
+    font-size:9px;color:var(--txt);padding:10px 14px;max-width:300px;
+    line-height:1.8;letter-spacing:.04em;border-radius:2px;">
+    <div style="color:var(--g);margin-bottom:6px;letter-spacing:.1em">RESET PERMISIUNI:</div>
+    <div id="sp-help-txt"></div>
+  </div>
+</div>
+
+<!-- CAMERA -->
+<div id="cw">
+  <video id="vid" autoplay muted playsinline></video>
+  <canvas id="oc"></canvas>
+  <div id="fl"></div>
+  <div class="sl"></div>
+  <div id="rb" class="blink">⏺ REC</div>
+  <div id="nfcb">◈ NFC</div>
+  <div id="qrb"></div>
+  <div id="nocam">
+    <div class="big">🔭</div>
+    <div>APASĂ START</div>
+    <div style="font-size:9px;opacity:.5">dublă atingere = schimbă camera</div>
+  </div>
+</div>
+
+<!-- SENSOR PANELS -->
+<div id="pn">
+  <div class="pnl">
+    <div class="pt">BUSOLĂ</div>
+    <canvas class="pc" id="cc"></canvas>
+    <div class="pv" id="p-az">---°</div>
+    <div class="ps" id="p-dir">--</div>
+  </div>
+  <div class="pnl">
+    <div class="pt">MIȘCARE</div>
+    <canvas class="pc" id="cm"></canvas>
+    <div class="pv" id="p-acc">-- m/s²</div>
+    <div class="ps" id="p-rot">-- °/s</div>
+  </div>
+  <div class="pnl">
+    <div class="pt">AUDIO</div>
+    <canvas class="pc" id="ca"></canvas>
+    <div class="pv" id="p-db">-- dB</div>
+    <div class="ps" id="p-ast">inactiv</div>
+  </div>
+  <div class="pnl">
+    <div class="pt">LUMINĂ</div>
+    <div class="pv" id="p-lux" style="font-size:17px;margin-top:2px">---</div>
+    <div class="ps">lux</div>
+    <div class="ps" id="p-lcat">senzor N/A</div>
+  </div>
+  <div class="pnl">
+    <div class="pt">BATERIE</div>
+    <div class="pv" id="p-bat" style="font-size:17px;margin-top:2px">--%</div>
+    <div class="ps" id="p-bst">---</div>
+    <div class="ps" id="p-btime"></div>
+  </div>
+  <div class="pnl">
+    <div class="pt">REȚEA</div>
+    <div class="pv" id="p-net" style="font-size:13px;margin-top:2px">---</div>
+    <div class="ps" id="p-nsub">---</div>
+    <div class="ps" id="p-ndl"></div>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div id="nb">
+  <input id="nt" type="text" placeholder="📝 notițe (dictare vocală disponibilă)">
+  <button id="db" title="Dictare vocală">🎙</button>
+</div>
+
+<!-- ACTION BAR -->
+<div id="ab">
+  <button class="ab yon" id="b-cam" onclick="toggleCam()">
+    <span class="ic">📷</span><span>START</span>
+  </button>
+  <button class="ab" id="b-ph" onclick="takePhoto()">
+    <span class="ic">📸</span><span>FOTO</span>
+  </button>
+  <button class="ab ron" id="b-rec" onclick="toggleAudioRec()">
+    <span class="ic">🎙</span><span>AUDIO</span>
+  </button>
+  <button class="ab" id="b-trc" onclick="toggleTorch()">
+    <span class="ic">🔦</span><span>TORȚĂ</span>
+  </button>
+  <button class="ab" id="b-nfc" onclick="toggleNFC()">
+    <span class="ic">📡</span><span>NFC</span>
+  </button>
+  <button class="ab oon" id="b-sv" onclick="saveRec()">
+    <span class="ic">💾</span><span>SALVARE</span>
+  </button>
+  <button class="ab" id="b-ar" onclick="openArch()">
+    <span class="ic">📂</span><span>ARHIVĂ</span>
+  </button>
+</div>
+
+<!-- ARCHIVE PANEL -->
+<div id="ar">
+  <div id="ar-h">
+    <span>ARHIVĂ RAPOARTE (<span id="ar-cnt">0</span>)</span>
+    <button onclick="closeArch()">✕</button>
+  </div>
+  <div id="ar-l"></div>
+</div>
+
+<!-- PHOTO VIEWER -->
+<div id="pv">
+  <button id="pv-close" onclick="document.getElementById('pv').classList.remove('on')">✕</button>
+  <img id="pv-img" src="" alt="">
+</div>
+
+<!-- TOAST -->
+<div id="ts"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// ASFAN FIELD OBSERVER v1
+// Single-file HTML · Offline · UI Română
+// Toate API-urile smartphone activate simultan
+// ═══════════════════════════════════════════════════
+
+const S = {
+  gps:  {lat:null,lon:null,alt:null,acc:null,spd:null},
+  ori:  {az:0,bt:0,gm:0,abs:false},
+  mot:  {ax:0,ay:0,az:9.81,gx:0,gy:0,gz:0},
+  aud:  {ctx:null,an:null,stream:null,data:null,level:0},
+  cam:  {stream:null,facing:'environment',torch:false},
+  arec: {on:false,mr:null,chunks:[]},
+  bat:  {lvl:null,chg:false},
+  net:  {type:'?',eff:'?'},
+  lux:  null,
+  wl:   null,
+  recog:null,
+  dicOn:false,
+  db:   null,
+  qrTimer:null,
+  bcd:  null,
+  lastPhoto:null,
+  lastAudio:null,
+  gpsWatch:null,
+  afCam:null
+};
+
+// ── UTILS ──────────────────────────────────────────
+const p2 = n => String(n).padStart(2,'0');
+const dg = d => ((d%360)+360)%360;
+const stamp = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}T${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`;
+};
+const DIRS = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSV','SV','VSV','V','VNV','NV','NNV'];
+const dir = az => DIRS[Math.round(dg(az)/22.5)%16];
+const luxCat = l => {
+  if(l==null)  return 'senzor N/A';
+  if(l<1)      return 'NOAPTE TOTALĂ';
+  if(l<10)     return 'CLAR DE LUNĂ';
+  if(l<50)     return 'STRADĂ NOAPTE';
+  if(l<300)    return 'INTERIOR';
+  if(l<1000)   return 'ÎNNORARE';
+  if(l<10000)  return 'PARȚIAL NOROS';
+  return 'SOARE DIRECT';
+};
+
+function toast(msg, ms=2000) {
+  const t=document.getElementById('ts');
+  t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),ms);
+}
+function vib(p=[20]){ navigator.vibrate&&navigator.vibrate(p); }
+function $id(id){ return document.getElementById(id); }
+
+// ── CLOCK ─────────────────────────────────────────
+(function clock(){
+  const t=new Date();
+  $id('s-time').textContent=`${p2(t.getHours())}:${p2(t.getMinutes())}:${p2(t.getSeconds())}`;
+  setTimeout(clock,1000);
+})();
+
+// ── GPS ───────────────────────────────────────────
+function initGPS(){
+  if(!navigator.geolocation){$id('g-coord').textContent='GPS: nedisponibil';return;}
+  S.gpsWatch=navigator.geolocation.watchPosition(p=>{
+    S.gps={lat:p.coords.latitude,lon:p.coords.longitude,
+           alt:p.coords.altitude,acc:p.coords.accuracy,spd:p.coords.speed};
+    const g=S.gps;
+    $id('g-coord').textContent=`${g.lat.toFixed(5)}°N  ${g.lon.toFixed(5)}°E`;
+    const mt=[];
+    if(g.alt!=null) mt.push(`${g.alt.toFixed(0)}m`);
+    if(g.acc!=null) mt.push(`±${g.acc.toFixed(0)}m`);
+    if(g.spd!=null&&g.spd>0.5) mt.push(`${(g.spd*3.6).toFixed(1)}km/h`);
+    $id('g-meta').textContent=mt.join('  ');
+  }, e=>{
+    if(e.code===1) $id('g-coord').textContent='GPS: permisiune refuzată';
+    else $id('g-coord').textContent='GPS: eroare cod '+e.code;
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:3000});
+}
+
+// ── ORIENTATION ───────────────────────────────────
+function initOri(){
+  const listen=()=>{
+    window.addEventListener('deviceorientationabsolute',onOri,true);
+    window.addEventListener('deviceorientation',onOri,true);
+  };
+  if(typeof DeviceOrientationEvent!=='undefined'&&
+     typeof DeviceOrientationEvent.requestPermission==='function'){
+    window._oriNeedPerm=true;
+  } else {
+    listen();
+  }
+  window._oriListen=listen;
+}
+function reqOriPerm(){
+  if(!window._oriNeedPerm)return;
+  DeviceOrientationEvent.requestPermission().then(r=>{
+    if(r==='granted'){window._oriListen();window._oriNeedPerm=false;}
+  }).catch(()=>{});
+}
+function onOri(e){
+  S.ori={az:e.alpha||0,bt:e.beta||0,gm:e.gamma||0,abs:!!e.absolute};
+  const az=dg(S.ori.az);
+  $id('p-az').textContent=`${az.toFixed(0)}°`;
+  $id('p-dir').textContent=`${dir(az)} β${S.ori.bt.toFixed(1)}°`;
+  drawCompass(az);
+}
+
+// ── MOTION ────────────────────────────────────────
+function initMot(){
+  const listen=()=>window.addEventListener('devicemotion',onMot,true);
+  if(typeof DeviceMotionEvent!=='undefined'&&
+     typeof DeviceMotionEvent.requestPermission==='function'){
+    window._motNeedPerm=true;
+  } else {
+    listen();
+  }
+  window._motListen=listen;
+}
+function reqMotPerm(){
+  if(!window._motNeedPerm)return;
+  DeviceMotionEvent.requestPermission().then(r=>{
+    if(r==='granted'){window._motListen();window._motNeedPerm=false;}
+  }).catch(()=>{});
+}
+function onMot(e){
+  const a=e.accelerationIncludingGravity||{};
+  const g=e.rotationRate||{};
+  S.mot={ax:a.x||0,ay:a.y||0,az:a.z||9.81,gx:g.alpha||0,gy:g.beta||0,gz:g.gamma||0};
+  const acc=Math.sqrt(S.mot.ax**2+S.mot.ay**2+S.mot.az**2);
+  const rot=Math.sqrt(S.mot.gx**2+S.mot.gy**2+S.mot.gz**2);
+  $id('p-acc').textContent=`${acc.toFixed(1)} m/s²`;
+  $id('p-rot').textContent=`${rot.toFixed(1)} °/s`;
+  drawMotion(S.mot.ax,S.mot.ay,S.mot.az);
+}
+
+// ── AMBIENT LIGHT ─────────────────────────────────
+function initLight(){
+  if(!('AmbientLightSensor' in window))return;
+  try{
+    const ls=new AmbientLightSensor({frequency:2});
+    ls.addEventListener('reading',()=>{
+      S.lux=ls.illuminance;
+      const v=S.lux<1000?S.lux.toFixed(0):(S.lux/1000).toFixed(1)+'k';
+      $id('p-lux').textContent=v;
+      $id('p-lcat').textContent=luxCat(S.lux);
+      $id('s-lux').textContent=S.lux.toFixed(0);
+    });
+    ls.start();
+  }catch(e){}
+}
+
+// ── BATTERY ───────────────────────────────────────
+async function initBat(){
+  if(!('getBattery' in navigator))return;
+  const b=await navigator.getBattery();
+  const upd=()=>{
+    const pct=Math.round(b.level*100);
+    S.bat={lvl:b.level,chg:b.charging};
+    $id('p-bat').textContent=pct+'%';
+    $id('s-bat').textContent=pct+'%';
+    $id('s-bi').textContent=b.charging?'⚡':pct<20?'🪫':'🔋';
+    $id('p-bst').textContent=b.charging?'⚡ încărcare':pct<20?'⚠ scăzut':'baterie';
+    if(b.chargingTime<Infinity&&b.chargingTime>0)
+      $id('p-btime').textContent=`~${Math.round(b.chargingTime/60)}min`;
+    else if(b.dischargingTime<Infinity&&b.dischargingTime>0)
+      $id('p-btime').textContent=`~${Math.round(b.dischargingTime/60)}min`;
+  };
+  ['levelchange','chargingchange'].forEach(ev=>b.addEventListener(ev,upd));
+  upd();
+}
+
+// ── NETWORK ───────────────────────────────────────
+function initNet(){
+  const nc=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+  if(!nc){$id('p-net').textContent='N/A';return;}
+  const upd=()=>{
+    S.net={type:nc.type||'?',eff:nc.effectiveType||'?'};
+    $id('p-net').textContent=(nc.type||nc.effectiveType||'?').toUpperCase();
+    $id('p-nsub').textContent=nc.effectiveType||'';
+    $id('s-net').textContent=nc.effectiveType||nc.type||'?';
+    if(nc.downlink) $id('p-ndl').textContent=nc.downlink+'Mbps';
+    if(nc.rtt) $id('p-ndl').textContent+=' rtt:'+nc.rtt+'ms';
+  };
+  nc.addEventListener('change',upd); upd();
+}
+
+// ── ACTIVATE ALL (un singur tap → toți senzorii) ──
+//
+// FIX iOS: requestPermission() TREBUIE inițiat SINCRON, în același
+// call stack al gestului. Funcția NU este async — Promise-urile sunt
+// create imediat, înainte de orice await.
+//
+function activateAll(){
+  const btn=document.getElementById('btn-all');
+  const st=document.getElementById('sp-st');
+  const help=document.getElementById('sp-help');
+  const helpTxt=document.getElementById('sp-help-txt');
+  btn.disabled=true; btn.textContent='⏳...';
+  const log=msg=>{st.innerHTML=msg;};
+  const fail=(msg,hints)=>{
+    st.innerHTML='<span style="color:var(--o)">⚠ '+msg+'</span>';
+    if(hints){help.style.display='block';helpTxt.innerHTML=hints;}
+    btn.disabled=false; btn.textContent='↺ RETRY';
+  };
+
+  // ── FIX iOS: requestPermission() SINCRON, înainte de orice await ──
+  const oriP=(typeof DeviceOrientationEvent!=='undefined'&&
+              typeof DeviceOrientationEvent.requestPermission==='function')
+    ? DeviceOrientationEvent.requestPermission()
+    : Promise.resolve('granted');
+  const motP=(typeof DeviceMotionEvent!=='undefined'&&
+              typeof DeviceMotionEvent.requestPermission==='function')
+    ? DeviceMotionEvent.requestPermission()
+    : Promise.resolve('granted');
+
+  // getUserMedia de asemenea sincron (chiar dacă e async, e lansat din gest)
+  const mediaP=navigator.mediaDevices
+    ? navigator.mediaDevices.getUserMedia({
+        video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},
+        audio:true
+      })
+    : Promise.reject(new DOMException('MediaDevices indisponibil','NotSupportedError'));
+
+  // Acum procesăm toate rezultatele
+  (async()=>{
+    // Orientare + mișcare
+    log('senzori orientare + mișcare...');
+    const [oriR,motR]=await Promise.all([
+      oriP.catch(()=>'denied'),
+      motP.catch(()=>'denied')
+    ]);
+    if(oriR==='granted'){
+      if(window._oriListen) window._oriListen();
+      window._oriNeedPerm=false;
+    }
+    if(motR==='granted'){
+      if(window._motListen) window._motListen();
+      window._motNeedPerm=false;
+    }
+
+    // Cameră + microfon
+    log('cameră + microfon...');
+    let mediaOk=false;
+    try{
+      const av=await mediaP;
+      // Video stream
+      S.cam.stream=new MediaStream(av.getVideoTracks());
+      const v=document.getElementById('vid');
+      v.srcObject=S.cam.stream; await v.play();
+      document.getElementById('nocam').style.display='none';
+      document.getElementById('b-cam').classList.add('on');
+      document.getElementById('b-cam').querySelector('span:last-child').textContent='STOP';
+      // Audio analyser
+      const aT=av.getAudioTracks();
+      if(aT.length){
+        S.aud.stream=new MediaStream(aT);
+        S.aud.ctx=new(window.AudioContext||window.webkitAudioContext)();
+        const src=S.aud.ctx.createMediaStreamSource(S.aud.stream);
+        S.aud.an=S.aud.ctx.createAnalyser();
+        S.aud.an.fftSize=256;
+        src.connect(S.aud.an);
+        S.aud.data=new Uint8Array(S.aud.an.frequencyBinCount);
+        document.getElementById('p-ast').textContent='activ';
+        animAudio();
+      }
+      mediaOk=true;
+    }catch(e){
+      // Diagnostics detaliate pe tip de eroare
+      const proto=location.protocol;
+      const isFile=proto==='file:';
+      const isHttp=proto==='http:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1';
+      if(isFile){
+        fail('Protocol file:// blocat',
+          '📂 Fișierul e deschis local.<br>'+
+          'Browserele blochează camera pe <b>file://</b>.<br><br>'+
+          '✅ <b>Android Chrome:</b> transferă pe telefon și deschide prin server:<br>'+
+          '<code>python3 -m http.server 8080</code><br>'+
+          'apoi accesează <code>http://IP:8080</code><br><br>'+
+          '✅ <b>iOS Safari:</b> încearcă direct — Safari permite file:// uneori.<br><br>'+
+          '✅ <b>Oriunde:</b> găzduiește pe GitHub Pages / Netlify (HTTPS gratuit).');
+      }else if(isHttp){
+        fail('HTTP nesecurizat',
+          '🔒 Camera necesită <b>HTTPS</b> sau localhost.<br><br>'+
+          '✅ Adaugă certificat SSL sau folosește:<br>'+
+          '<code>python3 -m http.server 8080</code><br>'+
+          'accesibil ca <code>http://localhost:8080</code>');
+      }else if(e.name==='NotAllowedError'){
+        fail('Permisiune refuzată anterior',
+          '🔄 <b>Android Chrome:</b><br>'+
+          '· Apasă 🔒 din bara URL<br>'+
+          '· Setări site → Cameră → Permite<br>'+
+          '· Setări site → Microfon → Permite<br><br>'+
+          '🔄 <b>iOS Safari:</b><br>'+
+          '· Setări → Safari → Cameră → Permite<br>'+
+          '· Setări → Safari → Microfon → Permite<br>'+
+          '· Sau: Setări → Confidențialitate → Cameră<br><br>'+
+          '🔄 <b>Firefox:</b><br>'+
+          '· ☰ → Permisiuni → Cameră/Microfon → Permite');
+      }else if(e.name==='NotFoundError'){
+        fail('Cameră negăsită','Dispozitivul nu are cameră detectabilă.');
+      }else if(e.name==='NotReadableError'){
+        fail('Camera ocupată','O altă aplicație folosește camera. Închide-o și încearcă din nou.');
+      }else if(e.name==='OverconstrainedError'){
+        fail('Constrângeri video incompatibile','Se reia cu setări mai relaxate...');
+        // Retry fără constraints
+        try{
+          const av2=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+          S.cam.stream=new MediaStream(av2.getVideoTracks());
+          const v=document.getElementById('vid');
+          v.srcObject=S.cam.stream; await v.play();
+          document.getElementById('nocam').style.display='none';
+          document.getElementById('b-cam').classList.add('on');
+          document.getElementById('b-cam').querySelector('span:last-child').textContent='STOP';
+          mediaOk=true;
+          help.style.display='none';
+          btn.disabled=true; btn.textContent='⏳...';
+        }catch(e2){fail('Eroare cameră: '+e2.name,'');}
+      }else{
+        fail(e.name+': '+e.message.substring(0,60),'');
+      }
+      if(!mediaOk) return;
+    }
+
+    // Wake Lock
+    log('wake lock...');
+    await reqWL();
+
+    // QR / Barcode
+    log('detector QR...');
+    startQR();
+
+    // Dictare vocală
+    log('recunoaștere vocală...');
+    if(S.recog){
+      try{S.dicOn=true;S.recog.start();document.getElementById('db').classList.add('on');}
+      catch(e){}
+    }
+
+    // NFC (silent)
+    if('NDEFReader' in window){
+      log('NFC...');
+      try{
+        const nfcr=new NDEFReader();
+        await nfcr.scan();
+        document.getElementById('b-nfc').classList.add('on');
+        document.getElementById('nfcb').classList.add('on');
+        nfcr.onreading=({message,serialNumber})=>{
+          let c='NFC['+serialNumber+']';
+          for(const r of message.records){
+            const dc=new TextDecoder(r.encoding||'utf-8');
+            if(r.recordType==='text'||r.recordType==='url') c=dc.decode(r.data);
+          }
+          document.getElementById('nt').value=c;
+          vib([20,30,20]); toast('📡 NFC: '+c.substring(0,40),3000);
+        };
+      }catch(e){}
+    }
+
+    // Fade out splash
+    log('✓ toți senzorii activi');
+    vib([10,20,50,20,10]);
+    await new Promise(r=>setTimeout(r,500));
+    const sp=document.getElementById('splash');
+    sp.style.transition='opacity .4s';
+    sp.style.opacity='0';
+    setTimeout(()=>sp.style.display='none',420);
+    toast('🔭 Toți senzorii activi!',2500);
+    speak('Sistem activ');
+  })();
+}
+
+// Diagnostics protocol la încărcare
+(function checkProto(){
+  const proto=location.protocol;
+  const warn=document.getElementById('sp-warn');
+  if(!warn) return;
+  if(proto==='file:'){
+    warn.style.display='block';
+    warn.innerHTML='⚠ Protocol <b>file://</b> detectat<br><small>Camera poate fi blocată pe Android/Firefox.<br>iOS Safari funcționează. Pentru Android: server local sau HTTPS.</small>';
+  } else if(proto==='http:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
+    warn.style.display='block';
+    warn.innerHTML='⚠ HTTP nesecurizat detectat<br><small>Camera necesită HTTPS sau localhost.</small>';
+  }
+})();
+
+// ── CAMERA ────────────────────────────────────────
+async function toggleCam(){
+  if(S.cam.stream){stopCam();return;}
+  await startCam();
+}
+async function startCam(){
+  if(window._oriNeedPerm) reqOriPerm();
+  if(window._motNeedPerm) reqMotPerm();
+  try{
+    S.cam.stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:S.cam.facing,width:{ideal:1280},height:{ideal:720}},
+      audio:false
+    });
+    const v=$id('vid');
+    v.srcObject=S.cam.stream; await v.play();
+    $id('nocam').style.display='none';
+    $id('b-cam').classList.add('on');
+    $id('b-cam').querySelector('span:last-child').textContent='STOP';
+    initAudio();
+    startQR();
+    reqWL();
+    toast('📷 Cameră activă'); vib([10,30]);
+  }catch(e){
+    toast('⚠ Cameră: '+e.message,3000);
+  }
+}
+function stopCam(){
+  if(!S.cam.stream)return;
+  S.cam.stream.getTracks().forEach(t=>t.stop());
+  S.cam.stream=null;
+  $id('vid').srcObject=null;
+  $id('nocam').style.display='flex';
+  $id('b-cam').classList.remove('on');
+  $id('b-cam').querySelector('span:last-child').textContent='START';
+  if(S.cam.torch){S.cam.torch=false;$id('b-trc').classList.remove('on');}
+  stopQR(); relWL();
+  toast('📷 Cameră oprită');
+}
+// Dublu tap → flip
+$id('vid').addEventListener('dblclick',async()=>{
+  if(!S.cam.stream)return;
+  S.cam.facing=S.cam.facing==='environment'?'user':'environment';
+  const wasTorch=S.cam.torch; S.cam.torch=false;
+  stopCam(); await startCam();
+  if(wasTorch&&S.cam.facing==='environment') toggleTorch();
+  toast(S.cam.facing==='user'?'🤳 Cameră frontală':'📷 Cameră spate');
+});
+
+// ── TORCH ─────────────────────────────────────────
+async function toggleTorch(){
+  if(!S.cam.stream){toast('⚠ Pornește camera mai întâi');return;}
+  const track=S.cam.stream.getVideoTracks()[0];
+  const caps=track.getCapabilities?track.getCapabilities():{};
+  if(!caps.torch){toast('⚠ Torță indisponibilă pe acest dispozitiv');return;}
+  S.cam.torch=!S.cam.torch;
+  await track.applyConstraints({advanced:[{torch:S.cam.torch}]}).catch(()=>{});
+  $id('b-trc').classList.toggle('on',S.cam.torch);
+  $id('b-trc').querySelector('.ic').textContent=S.cam.torch?'💡':'🔦';
+  vib([10]);
+}
+
+// ── PHOTO ─────────────────────────────────────────
+function takePhoto(){
+  if(!S.cam.stream){toast('⚠ Pornește camera mai întâi');return;}
+  const v=$id('vid');
+  const cvs=document.createElement('canvas');
+  cvs.width=v.videoWidth||640; cvs.height=v.videoHeight||480;
+  const ctx=cvs.getContext('2d');
+  ctx.drawImage(v,0,0);
+  // Watermark ASFAN
+  const H=cvs.height, W=cvs.width;
+  const g=S.gps; const az=dg(S.ori.az).toFixed(0);
+  const lines=[
+    `ASFAN FIELD OBS | ${stamp()}`,
+    g.lat?`GPS: ${g.lat.toFixed(5)}°N  ${g.lon.toFixed(5)}°E${g.alt?' '+g.alt.toFixed(0)+'m':''}`:null,
+    `AZ:${az}° ${dir(S.ori.az)} | EL:${S.ori.bt.toFixed(1)}° | γ${S.ori.gm.toFixed(1)}°`,
+    S.lux!=null?`Lumină: ${S.lux.toFixed(0)} lux · ${luxCat(S.lux)}`:null
+  ].filter(Boolean);
+  const lh=H*0.028; const pad=H*0.012;
+  ctx.fillStyle='rgba(0,0,0,.55)';
+  ctx.fillRect(0,H-lines.length*lh-pad*2,W,lines.length*lh+pad*2);
+  ctx.fillStyle='#00e587';
+  ctx.font=`${Math.round(H*0.022)}px 'Courier New',monospace`;
+  ctx.textAlign='left';
+  lines.forEach((l,i)=>ctx.fillText(l,8,H-(lines.length-i-1)*lh-pad));
+  S.lastPhoto=cvs.toDataURL('image/jpeg',0.88);
+  // Flash
+  const fl=$id('fl'); fl.style.opacity='1';
+  setTimeout(()=>fl.style.opacity='0',80);
+  vib([20,40,20]);
+  toast('📸 Fotografie capturată!');
+}
+
+// ── AUDIO ─────────────────────────────────────────
+async function initAudio(){
+  if(S.aud.ctx)return;
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+    S.aud.stream=stream;
+    S.aud.ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const src=S.aud.ctx.createMediaStreamSource(stream);
+    S.aud.an=S.aud.ctx.createAnalyser();
+    S.aud.an.fftSize=256;
+    src.connect(S.aud.an);
+    S.aud.data=new Uint8Array(S.aud.an.frequencyBinCount);
+    $id('p-ast').textContent='activ';
+    animAudio();
+  }catch(e){$id('p-ast').textContent='N/A';}
+}
+function animAudio(){
+  if(!S.aud.an){requestAnimationFrame(animAudio);return;}
+  S.aud.an.getByteFrequencyData(S.aud.data);
+  const avg=S.aud.data.reduce((s,v)=>s+v,0)/S.aud.data.length;
+  S.aud.level=avg;
+  const db=avg>0?(20*Math.log10(avg/255)).toFixed(1):-96;
+  $id('p-db').textContent=`${db} dB`;
+  drawAudio(S.aud.data);
+  requestAnimationFrame(animAudio);
+}
+
+// ── AUDIO RECORDING ───────────────────────────────
+function toggleAudioRec(){
+  S.arec.on?stopAudioRec():startAudioRec();
+}
+async function startAudioRec(){
+  if(!S.aud.stream) await initAudio();
+  if(!S.aud.stream){toast('⚠ Microfon indisponibil');return;}
+  S.arec.chunks=[];
+  const mime=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4']
+              .find(m=>MediaRecorder.isTypeSupported(m))||'';
+  try{
+    S.arec.mr=new MediaRecorder(S.aud.stream,mime?{mimeType:mime}:{});
+    S.arec.mr.ondataavailable=e=>S.arec.chunks.push(e.data);
+    S.arec.mr.onstop=()=>{
+      const blob=new Blob(S.arec.chunks,{type:S.arec.mr.mimeType});
+      const fr=new FileReader();
+      fr.onload=()=>{S.lastAudio=fr.result;};
+      fr.readAsDataURL(blob);
+    };
+    S.arec.mr.start(200);
+    S.arec.on=true;
+    $id('b-rec').classList.add('on');
+    $id('rb').classList.add('on');
+    $id('p-ast').textContent='⏺ REC';
+    vib([15,40,15]);
+  }catch(e){toast('⚠ Rec: '+e.message,3000);}
+}
+function stopAudioRec(){
+  if(!S.arec.mr||!S.arec.on)return;
+  S.arec.mr.stop(); S.arec.on=false;
+  $id('b-rec').classList.remove('on');
+  $id('rb').classList.remove('on');
+  $id('p-ast').textContent='activ';
+  toast('🎙 Înregistrare salvată în memorie'); vib([30]);
+}
+
+// ── SPEECH RECOGNITION ────────────────────────────
+function initSpeech(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return;
+  S.recog=new SR();
+  S.recog.lang='ro-RO';
+  S.recog.continuous=true;
+  S.recog.interimResults=true;
+  S.recog.onresult=e=>{
+    let txt='';
+    for(let i=e.resultIndex;i<e.results.length;i++) txt+=e.results[i][0].transcript;
+    $id('nt').value=txt;
+  };
+  S.recog.onend=()=>{if(S.dicOn) S.recog.start();};
+  $id('db').addEventListener('click',()=>{
+    if(!S.recog){toast('⚠ Dictare indisponibilă pe acest browser');return;}
+    S.dicOn=!S.dicOn;
+    if(S.dicOn){S.recog.start();$id('db').classList.add('on');vib([10]);}
+    else{S.recog.stop();$id('db').classList.remove('on');}
+  });
+}
+
+// ── WAKE LOCK ─────────────────────────────────────
+async function reqWL(){
+  if(!('wakeLock' in navigator))return;
+  try{
+    S.wl=await navigator.wakeLock.request('screen');
+    $id('s-wl').textContent='🔆';
+    S.wl.addEventListener('release',()=>{$id('s-wl').textContent='💤';S.wl=null;});
+  }catch(e){}
+}
+async function relWL(){if(S.wl){await S.wl.release();S.wl=null;}}
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&S.cam.stream) reqWL();
+});
+
+// ── BARCODE / QR ──────────────────────────────────
+function startQR(){
+  if(!('BarcodeDetector' in window))return;
+  try{
+    S.bcd=new BarcodeDetector({formats:['qr_code','ean_13','code_128','data_matrix','aztec']});
+    S.qrTimer=setInterval(async()=>{
+      const v=$id('vid');
+      if(!v||v.readyState<2||!S.cam.stream)return;
+      try{
+        const r=await S.bcd.detect(v);
+        if(r.length>0){
+          const val=r[0].rawValue;
+          $id('qrb').textContent='◈ QR: '+val.substring(0,60)+(val.length>60?'…':'');
+          $id('qrb').classList.add('on');
+          vib([10,20,10]);
+          setTimeout(()=>$id('qrb').classList.remove('on'),3500);
+        }
+      }catch(e){}
+    },900);
+  }catch(e){}
+}
+function stopQR(){
+  if(S.qrTimer){clearInterval(S.qrTimer);S.qrTimer=null;}
+  $id('qrb').classList.remove('on');
+}
+
+// ── NFC ───────────────────────────────────────────
+let _nfcReader=null;
+async function toggleNFC(){
+  if(!('NDEFReader' in window)){toast('⚠ NFC indisponibil pe acest dispozitiv',3000);return;}
+  const btn=$id('b-nfc');
+  if(btn.classList.contains('on')){
+    btn.classList.remove('on');
+    $id('nfcb').classList.remove('on');
+    _nfcReader=null;
+    toast('📡 NFC oprit'); return;
+  }
+  try{
+    _nfcReader=new NDEFReader();
+    await _nfcReader.scan();
+    btn.classList.add('on');
+    $id('nfcb').classList.add('on');
+    _nfcReader.onreading=({message,serialNumber})=>{
+      let content=`NFC[${serialNumber}]`;
+      for(const r of message.records){
+        const dec=new TextDecoder(r.encoding||'utf-8');
+        if(r.recordType==='text'||r.recordType==='url') content=dec.decode(r.data);
+      }
+      $id('nt').value=content;
+      vib([20,30,20]);
+      toast('📡 NFC: '+content.substring(0,40),3000);
+    };
+    toast('📡 NFC activ — apropie un tag',2500);
+  }catch(e){toast('⚠ NFC: '+e.message,3000);btn.classList.remove('on');}
+}
+
+// ── INDEXEDDB ─────────────────────────────────────
+function initDB(){
+  const req=indexedDB.open('ASFAN_FO',2);
+  req.onupgradeneeded=e=>{
+    const db=e.target.result;
+    if(!db.objectStoreNames.contains('recs'))
+      db.createObjectStore('recs',{keyPath:'id',autoIncrement:true});
+  };
+  req.onsuccess=e=>{S.db=e.target.result; refreshCnt();};
+  req.onerror=()=>toast('⚠ Storage DB indisponibil',2000);
+}
+function refreshCnt(){
+  if(!S.db)return;
+  const tx=S.db.transaction('recs','readonly');
+  tx.objectStore('recs').count().onsuccess=e=>
+    document.querySelectorAll('.arch-cnt').forEach(el=>el.textContent=e.target.result);
+}
+
+// ── SAVE RECORD ───────────────────────────────────
+function saveRec(){
+  const rec={
+    ts:stamp(),
+    gps:{...S.gps},
+    ori:{az:S.ori.az,bt:S.ori.bt,gm:S.ori.gm,abs:S.ori.abs},
+    mot:{ax:S.mot.ax,ay:S.mot.ay,az:S.mot.az},
+    lux:S.lux,
+    bat:{...S.bat},
+    net:{...S.net},
+    notes:$id('nt').value.trim(),
+    photo:S.lastPhoto||null,
+    audio:S.lastAudio||null
+  };
+  if(!S.db){
+    dlJSON(rec); toast('💾 JSON descărcat (fără DB)'); return;
+  }
+  const tx=S.db.transaction('recs','readwrite');
+  tx.objectStore('recs').add(rec);
+  tx.oncomplete=()=>{
+    toast('💾 Raport salvat!'); vib([10,20,50]);
+    refreshCnt();
+    S.lastPhoto=null; S.lastAudio=null;
+    $id('nt').value='';
+    speak('Raport salvat');
+  };
+}
+function dlJSON(data){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download=`asfan_${data.ts.replace(/[T:]/g,'_')}.json`;
+  a.click();
+}
+
+// ── ARCHIVE ───────────────────────────────────────
+$id('ar').querySelector('#ar-cnt').className='arch-cnt';
+function openArch(){$id('ar').classList.add('on');loadArch();}
+function closeArch(){$id('ar').classList.remove('on');}
+function loadArch(){
+  if(!S.db){$id('ar-l').innerHTML='<div style="padding:20px;color:var(--dim);text-align:center">Baza de date indisponibilă</div>';return;}
+  const tx=S.db.transaction('recs','readonly');
+  tx.objectStore('recs').getAll().onsuccess=e=>{
+    const list=[...e.target.result].reverse();
+    if(!list.length){$id('ar-l').innerHTML='<div style="padding:20px;color:var(--dim);text-align:center">Niciun raport salvat încă.</div>';return;}
+    $id('ar-l').innerHTML=list.map(r=>{
+      const g=r.gps||{};
+      const az=r.ori?dg(r.ori.az).toFixed(0):'--';
+      const el=r.ori?r.ori.bt.toFixed(1):'--';
+      return `<div class="rec">
+        <div class="rts">${r.ts}</div>
+        <div class="rpos">${g.lat?`📍 ${g.lat.toFixed(5)}°N  ${g.lon.toFixed(5)}°E  ${g.alt?g.alt.toFixed(0)+'m':''}`:' GPS: N/A'}</div>
+        <div class="raz">🧭 AZ:${az}° ${r.ori?dir(r.ori.az):''} | EL:${el}°${r.lux!=null?' | 💡'+r.lux.toFixed(0)+'lx':''}</div>
+        ${r.notes?`<div class="rnt">📝 ${r.notes}</div>`:''}
+        <div class="rbt">
+          ${r.photo?`<button onclick="viewPhoto(${r.id})">📸</button>`:''}
+          ${r.audio?`<button onclick="playAudio(${r.id})">🔊</button>`:''}
+          <button onclick="shareRec(${r.id})">📤 SHARE</button>
+          <button onclick="dlRec(${r.id})">⬇ JSON</button>
+          <button onclick="delRec(${r.id})">🗑</button>
+        </div>
+      </div>`;
+    }).join('');
+  };
+}
+function delRec(id){
+  if(!S.db||!confirm('Ștergi raportul?'))return;
+  const tx=S.db.transaction('recs','readwrite');
+  tx.objectStore('recs').delete(id);
+  tx.oncomplete=()=>{loadArch();refreshCnt();toast('🗑 Șters');};
+}
+function getRecById(id,cb){
+  if(!S.db)return;
+  const tx=S.db.transaction('recs','readonly');
+  tx.objectStore('recs').get(id).onsuccess=e=>cb(e.target.result);
+}
+function viewPhoto(id){
+  getRecById(id,r=>{
+    if(!r||!r.photo)return;
+    $id('pv-img').src=r.photo;
+    $id('pv').classList.add('on');
+  });
+}
+function playAudio(id){
+  getRecById(id,r=>{
+    if(!r||!r.audio)return;
+    new Audio(r.audio).play();
+    toast('🔊 Redare audio...');
+  });
+}
+async function shareRec(id){
+  getRecById(id,async r=>{
+    if(!r)return;
+    const g=r.gps||{};
+    const txt=[
+      'ASFAN Field Observer — Raport',
+      `Data: ${r.ts}`,
+      g.lat?`GPS: ${g.lat.toFixed(5)}°N  ${g.lon.toFixed(5)}°E  Alt: ${g.alt?g.alt.toFixed(0)+'m':'N/A'}`:'GPS: N/A',
+      `Azimut: ${r.ori?dg(r.ori.az).toFixed(0)+'° '+dir(r.ori.az):'N/A'}`,
+      `Elevație: ${r.ori?r.ori.bt.toFixed(1)+'°':'N/A'}`,
+      r.lux!=null?`Lumină: ${r.lux.toFixed(0)} lux · ${luxCat(r.lux)}`:'',
+      r.notes?`Note: ${r.notes}`:'',
+    ].filter(Boolean).join('\n');
+    if(navigator.share){
+      await navigator.share({title:'ASFAN Raport',text:txt}).catch(()=>{});
+      toast('📤 Partajat!');
+    }else{
+      await navigator.clipboard?.writeText(txt);
+      toast('📋 Copiat în clipboard!');
+    }
+  });
+}
+function dlRec(id){
+  getRecById(id,r=>{if(r) dlJSON(r);});
+}
+
+// ── SPEECH SYNTHESIS ──────────────────────────────
+function speak(txt){
+  if(!window.speechSynthesis)return;
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang='ro-RO'; u.rate=1.1;
+  speechSynthesis.speak(u);
+}
+
+// ── OVERLAY CANVAS ANIMATION ──────────────────────
+function initOC(){
+  const cvs=$id('oc');
+  const fit=()=>{const w=$id('cw');cvs.width=w.offsetWidth;cvs.height=w.offsetHeight;};
+  fit(); new ResizeObserver(fit).observe($id('cw'));
+  (function loopOC(){
+    const w=cvs.width,h=cvs.height;
+    const ctx=cvs.getContext('2d');
+    ctx.clearRect(0,0,w,h);
+    const cx=w/2,cy=h/2;
+    const arm=Math.min(w,h)*.12,gap=Math.min(w,h)*.035;
+    const bp=Math.min(w,h)*.075,bl=Math.min(w,h)*.055;
+
+    // Crosshair
+    ctx.strokeStyle='#00e587'; ctx.lineWidth=1; ctx.globalAlpha=.65;
+    [[cx-arm-gap,cy,cx-gap,cy],[cx+gap,cy,cx+arm+gap,cy],
+     [cx,cy-arm-gap,cx,cy-gap],[cx,cy+gap,cx,cy+arm+gap]].forEach(([x1,y1,x2,y2])=>{
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    });
+    // Center dot
+    ctx.strokeStyle='#00c4ff';ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(cx,cy,gap*.45,0,Math.PI*2);ctx.stroke();
+    // Corner brackets
+    ctx.strokeStyle='#00e587';ctx.lineWidth=1.5;ctx.globalAlpha=.75;
+    [[bp,bp,bp+bl,bp,bp,bp+bl],[w-bp,bp,w-bp-bl,bp,w-bp,bp+bl],
+     [bp,h-bp,bp+bl,h-bp,bp,h-bp-bl],[w-bp,h-bp,w-bp-bl,h-bp,w-bp,h-bp-bl]]
+    .forEach(([x1,y1,x2,y2,x3,y3])=>{
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+      ctx.moveTo(x1,y1);ctx.lineTo(x3,y3);ctx.stroke();
+    });
+    // Text overlays
+    ctx.globalAlpha=.9; ctx.shadowColor='#000'; ctx.shadowBlur=4;
+    const fs=Math.min(h*.026,13);
+    ctx.font=`bold ${fs}px 'Courier New',monospace`;
+    const az=dg(S.ori.az).toFixed(0);
+    // Top-left: AZ / EL
+    ctx.fillStyle='#00e587';ctx.textAlign='left';
+    ctx.fillText(`AZ ${az}° ${dir(S.ori.az)}`,bp+bl+5,bp+fs+1);
+    ctx.fillText(`EL ${S.ori.bt>0?'+':''}${S.ori.bt.toFixed(1)}°`,bp+bl+5,bp+fs*2+3);
+    // Top-right: GPS
+    ctx.textAlign='right';
+    if(S.gps.lat){
+      ctx.fillStyle='#00c4ff';
+      ctx.fillText(`${S.gps.lat.toFixed(4)}°N`,w-bp-bl-5,bp+fs+1);
+      ctx.fillText(`${S.gps.lon.toFixed(4)}°E`,w-bp-bl-5,bp+fs*2+3);
+    }else{
+      ctx.fillStyle='#ff704066';
+      ctx.fillText('GPS N/A',w-bp-bl-5,bp+fs+1);
+    }
+    // Bottom-left: clock
+    const tn=new Date();
+    ctx.fillStyle='#00e587';ctx.textAlign='left';
+    ctx.fillText(`${p2(tn.getHours())}:${p2(tn.getMinutes())}:${p2(tn.getSeconds())}`,bp+bl+5,h-bp-3);
+    // Bottom-right: lux
+    ctx.textAlign='right';
+    if(S.lux!=null) ctx.fillText(`${S.lux.toFixed(0)}lx`,w-bp-bl-5,h-bp-3);
+    ctx.shadowBlur=0;ctx.globalAlpha=1;
+    requestAnimationFrame(loopOC);
+  })();
+}
+
+// ── COMPASS CANVAS ────────────────────────────────
+function drawCompass(az){
+  const cvs=$id('cc'); if(!cvs||!cvs.offsetWidth) return;
+  const dpr=window.devicePixelRatio||1;
+  if(cvs.width!==cvs.offsetWidth*dpr){
+    cvs.width=cvs.offsetWidth*dpr; cvs.height=cvs.offsetHeight*dpr;
+  }
+  const ctx=cvs.getContext('2d');
+  const w=cvs.width,h=cvs.height,cx=w/2,cy=h/2;
+  const r=Math.min(w,h)/2*.88;
+  ctx.clearRect(0,0,w,h);
+  // Ring
+  ctx.strokeStyle='#0a2218';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+  // Cardinals
+  ['N','E','S','V'].forEach((c,i)=>{
+    const ang=(i*Math.PI/2)-Math.PI/2-(dg(az)*Math.PI/180);
+    ctx.strokeStyle=c==='N'?'#ff3355':'#1e5030';
+    ctx.lineWidth=c==='N'?2:1;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(ang)*r*.68,cy+Math.sin(ang)*r*.68);
+    ctx.lineTo(cx+Math.cos(ang)*r*.95,cy+Math.sin(ang)*r*.95);
+    ctx.stroke();
+  });
+  // Needle
+  const na=-dg(az)*Math.PI/180-Math.PI/2;
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(na);
+  ctx.beginPath();
+  ctx.moveTo(0,-r*.68);ctx.lineTo(-r*.07,0);ctx.lineTo(0,r*.22);ctx.lineTo(r*.07,0);
+  ctx.closePath();ctx.fillStyle='#ff3355';ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(0,r*.68);ctx.lineTo(r*.055,0);ctx.lineTo(0,-r*.22);ctx.lineTo(-r*.055,0);
+  ctx.closePath();ctx.fillStyle='#163028';ctx.fill();
+  ctx.restore();
+  ctx.fillStyle='#00e587';ctx.beginPath();ctx.arc(cx,cy,2.5,0,Math.PI*2);ctx.fill();
+}
+
+// ── AUDIO CANVAS ──────────────────────────────────
+function drawAudio(data){
+  const cvs=$id('ca'); if(!cvs||!cvs.offsetWidth)return;
+  const dpr=window.devicePixelRatio||1;
+  if(cvs.width!==cvs.offsetWidth*dpr){
+    cvs.width=cvs.offsetWidth*dpr; cvs.height=cvs.offsetHeight*dpr;
+  }
+  const ctx=cvs.getContext('2d');
+  const w=cvs.width,h=cvs.height;
+  ctx.clearRect(0,0,w,h);
+  if(!data)return;
+  const step=Math.max(1,Math.floor(data.length/w));
+  const bw=w/(data.length/step);
+  for(let i=0;i<data.length;i+=step){
+    const v=data[i]/255;
+    const bh=v*h;
+    const hue=120-v*90;
+    ctx.fillStyle=`hsl(${hue},90%,${35+v*25}%)`;
+    ctx.fillRect((i/step)*bw,h-bh,Math.max(1,bw-1),bh);
+  }
+}
+
+// ── MOTION CANVAS ─────────────────────────────────
+function drawMotion(ax,ay,az){
+  const cvs=$id('cm'); if(!cvs||!cvs.offsetWidth)return;
+  const dpr=window.devicePixelRatio||1;
+  if(cvs.width!==cvs.offsetWidth*dpr){
+    cvs.width=cvs.offsetWidth*dpr; cvs.height=cvs.offsetHeight*dpr;
+  }
+  const ctx=cvs.getContext('2d');
+  const w=cvs.width,h=cvs.height;
+  ctx.clearRect(0,0,w,h);
+  const vals=[ax,ay,az];
+  const cols=['#ff3355','#00e587','#00c4ff'];
+  const bw=(w-4)/3;
+  vals.forEach((v,i)=>{
+    const n=Math.min(Math.abs(v)/20,1);
+    const bh=n*h;
+    ctx.globalAlpha=.5+n*.5;
+    ctx.fillStyle=cols[i];
+    ctx.fillRect(i*(bw+2),h-bh,bw,bh);
+  });
+  ctx.globalAlpha=1;
+}
+
+// ── SCREEN ORIENTATION ────────────────────────────
+if(screen.orientation&&screen.orientation.lock){
+  screen.orientation.lock('portrait').catch(()=>{});
+}
+
+// ── INIT ──────────────────────────────────────────
+initDB(); initGPS(); initOri(); initMot();
+initLight(); initBat(); initNet(); initSpeech();
+initOC();
+// Initial renders
+drawCompass(0); drawMotion(0,0,9.81);
+// Placeholder audio canvas (flat line)
+drawAudio(new Uint8Array(128).fill(0));
+</script>
+</body>
+</html>
