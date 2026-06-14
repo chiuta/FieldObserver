@@ -1,6 +1,32 @@
 <!DOCTYPE html>
+<!--
+  ============================================================================
+  FieldObserver
+  Autor: Alexandru-Ionuț Chiuță (Alexio · „Ecoul Stringurilor")
+  Aplicație single-file, offline-first, fără telemetrie.
+
+  LICENȚĂ — TRADE-FREE + CC0 1.0 (Public Domain Dedication)
+  Oferită liber, fără troc, în spiritul mișcării TROM (trom.tf). În măsura
+  permisă de lege, autorul renunță la drepturile de autor și dedică lucrarea
+  domeniului public: https://creativecommons.org/publicdomain/zero/1.0/
+  Poți folosi, copia, modifica și redistribui liber, în orice scop.
+
+  Sprijin voluntar (opțional, niciodată obligatoriu):
+    Patreon:         https://www.patreon.com/c/alexio_tf
+    Buy Me a Coffee: https://buymeacoffee.com/echo.of.the.strings
+  ============================================================================
+-->
 <html lang="ro">
 <head>
+<style id="tf-a11y-motion">
+/* Accesibilitate: respectă preferința utilizatorului pentru mai puțină mișcare (TROM/a11y). */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+/* Accesibilitate: inel de focus vizibil pentru navigare la tastatură. */
+:focus-visible{outline:2px solid #4a90d9;outline-offset:2px;border-radius:2px}
+</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1225,5 +1251,35 @@ drawCompass(0); drawMotion(0,0,9.81);
 // Placeholder audio canvas (flat line)
 drawAudio(new Uint8Array(128).fill(0));
 </script>
+<!-- tf-donate: sprijin voluntar (Patreon + Buy Me a Coffee) — self-contained, fără resurse externe, fără JS -->
+<div id="tf-donate" aria-label="Sprijină autorul">
+<style>
+#tf-donate{position:fixed;right:14px;bottom:14px;z-index:2147483600;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1}
+#tf-donate *{box-sizing:border-box}
+#tf-donate .tf-cb{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+#tf-donate .tf-panel{display:flex;gap:8px;align-items:center;background:rgba(20,20,24,.84);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:7px 9px 7px 12px;border-radius:999px;box-shadow:0 4px 18px rgba(0,0,0,.30)}
+#tf-donate .tf-lbl{color:#fff;font-size:12px;font-weight:600;opacity:.85;white-space:nowrap}
+#tf-donate a.tf-b{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;text-decoration:none;font-size:12.5px;font-weight:700;line-height:1;transition:transform .14s ease;border:0}
+#tf-donate a.tf-b:hover{transform:translateY(-2px)}
+#tf-donate a.tf-pat{background:#fff;color:#000}
+#tf-donate a.tf-bmc{background:#ffdd00;color:#1a1a1a}
+#tf-donate a.tf-b svg{width:15px;height:15px;display:block}
+#tf-donate .tf-x,#tf-donate .tf-open{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;border:0;color:#fff}
+#tf-donate .tf-x{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.16);font-size:12px}
+#tf-donate .tf-open{display:none;width:46px;height:46px;border-radius:50%;background:#e0245e;font-size:20px;box-shadow:0 4px 16px rgba(0,0,0,.32)}
+#tf-donate .tf-cb:checked ~ .tf-panel{display:none}
+#tf-donate .tf-cb:checked ~ .tf-open{display:inline-flex}
+@media (max-width:560px){#tf-donate .tf-lbl{display:none}}
+@media print{#tf-donate{display:none}}
+</style>
+<input type="checkbox" id="tf-donate-cb" class="tf-cb" aria-hidden="true">
+<div class="tf-panel">
+<span class="tf-lbl">Sprijină:</span>
+<a class="tf-b tf-pat" href="https://www.patreon.com/c/alexio_tf" target="_blank" rel="noopener" aria-label="Sprijină pe Patreon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="15.4" cy="9.4" r="6.6" fill="currentColor"/><rect x="2.4" y="2.4" width="3.7" height="19.2" fill="currentColor"/></svg>Patreon</a>
+<a class="tf-b tf-bmc" href="https://buymeacoffee.com/echo.of.the.strings" target="_blank" rel="noopener" aria-label="Buy Me a Coffee"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h11v6.5a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V8z"/><path d="M16 9.5h2.2a2.3 2.3 0 0 1 0 4.6H16"/><path d="M7.5 4.5V3M11.5 4.5V3"/></svg>Coffee</a>
+<label for="tf-donate-cb" class="tf-x" title="Ascunde" aria-label="Ascunde">✕</label>
+</div>
+<label for="tf-donate-cb" class="tf-open" title="Sprijină" aria-label="Sprijină">♥</label>
+</div>
 </body>
 </html>
