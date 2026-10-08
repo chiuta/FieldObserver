@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset="UTF-8">
 <!--
   ============================================================================
   FieldObserver
@@ -27,7 +28,6 @@
 /* Accesibilitate: inel de focus vizibil pentru navigare la tastatură. */
 :focus-visible{outline:2px solid #4a90d9;outline-offset:2px;border-radius:2px}
 </style>
-<meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' 'unsafe-inline' blob:; connect-src 'self'">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -373,6 +373,7 @@ function toast(msg, ms=2000) {
 }
 function vib(p=[20]){ navigator.vibrate&&navigator.vibrate(p); }
 function $id(id){ return document.getElementById(id); }
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // ── CLOCK ─────────────────────────────────────────
 (function clock(){
@@ -403,8 +404,10 @@ function initGPS(){
 // ── ORIENTATION ───────────────────────────────────
 function initOri(){
   const listen=()=>{
-    window.addEventListener('deviceorientationabsolute',onOri,true);
-    window.addEventListener('deviceorientation',onOri,true);
+    // Chrome Android emite ambele evenimente; ascultăm doar varianta absolută dacă există
+    // (altfel azimutul alternează între valori absolute și relative).
+    if('ondeviceorientationabsolute' in window) window.addEventListener('deviceorientationabsolute',onOri,true);
+    else window.addEventListener('deviceorientation',onOri,true);
   };
   if(typeof DeviceOrientationEvent!=='undefined'&&
      typeof DeviceOrientationEvent.requestPermission==='function'){
@@ -421,7 +424,13 @@ function reqOriPerm(){
   }).catch(()=>{});
 }
 function onOri(e){
-  S.ori={az:e.alpha||0,bt:e.beta||0,gm:e.gamma||0,abs:!!e.absolute};
+  // alpha crește în sens trigonometric; azimutul (busola) crește în sens orar => 360-alpha.
+  // iOS oferă direct webkitCompassHeading (orar, față de nordul magnetic).
+  let hd;
+  if(typeof e.webkitCompassHeading==='number') hd=e.webkitCompassHeading;
+  else if(e.alpha==null) return;
+  else hd=360-e.alpha;
+  S.ori={az:dg(hd),bt:e.beta||0,gm:e.gamma||0,abs:!!e.absolute||typeof e.webkitCompassHeading==='number'};
   const az=dg(S.ori.az);
   $id('p-az').textContent=`${az.toFixed(0)}°`;
   $id('p-dir').textContent=`${dir(az)} β${S.ori.bt.toFixed(1)}°`;
@@ -475,7 +484,7 @@ function initLight(){
 // ── BATTERY ───────────────────────────────────────
 async function initBat(){
   if(!('getBattery' in navigator))return;
-  const b=await navigator.getBattery();
+  let b; try{ b=await navigator.getBattery(); }catch(e){ return; }
   const upd=()=>{
     const pct=Math.round(b.level*100);
     S.bat={lvl:b.level,chg:b.charging};
@@ -501,8 +510,7 @@ function initNet(){
     $id('p-net').textContent=(nc.type||nc.effectiveType||'?').toUpperCase();
     $id('p-nsub').textContent=nc.effectiveType||'';
     $id('s-net').textContent=nc.effectiveType||nc.type||'?';
-    if(nc.downlink) $id('p-ndl').textContent=nc.downlink+'Mbps';
-    if(nc.rtt) $id('p-ndl').textContent+=' rtt:'+nc.rtt+'ms';
+    $id('p-ndl').textContent=[nc.downlink?nc.downlink+'Mbps':'',nc.rtt?'rtt:'+nc.rtt+'ms':''].filter(Boolean).join(' ');
   };
   nc.addEventListener('change',upd); upd();
 }
@@ -663,8 +671,9 @@ function activateAll(){
     if('NDEFReader' in window){
       log('NFC...');
       try{
-        const nfcr=new NDEFReader();
-        await nfcr.scan();
+        _nfcAbort=new AbortController();
+        const nfcr=_nfcReader=new NDEFReader();
+        await nfcr.scan({signal:_nfcAbort.signal});
         document.getElementById('b-nfc').classList.add('on');
         document.getElementById('nfcb').classList.add('on');
         nfcr.onreading=({message,serialNumber})=>{
@@ -811,6 +820,7 @@ async function initAudio(){
     S.aud.an.fftSize=256;
     src.connect(S.aud.an);
     S.aud.data=new Uint8Array(S.aud.an.frequencyBinCount);
+    if(S.aud.ctx.state==='suspended') S.aud.ctx.resume().catch(()=>{});
     $id('p-ast').textContent='activ';
     animAudio();
   }catch(e){$id('p-ast').textContent='N/A';}
@@ -865,7 +875,7 @@ function stopAudioRec(){
 // ── SPEECH RECOGNITION ────────────────────────────
 function initSpeech(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR)return;
+  if(!SR){ $id('db').addEventListener('click',()=>toast('⚠ Dictare indisponibilă pe acest browser')); return; }
   S.recog=new SR();
   S.recog.lang='ro-RO';
   S.recog.continuous=true;
@@ -875,11 +885,17 @@ function initSpeech(){
     for(let i=e.resultIndex;i<e.results.length;i++) txt+=e.results[i][0].transcript;
     $id('nt').value=txt;
   };
-  S.recog.onend=()=>{if(S.dicOn) S.recog.start();};
+  S.recog.onerror=ev=>{
+    if(ev.error==='not-allowed'||ev.error==='service-not-allowed'||ev.error==='language-not-supported'){
+      S.dicOn=false; $id('db').classList.remove('on');
+      toast('⚠ Dictare oprită: '+ev.error,3000);
+    }
+  };
+  S.recog.onend=()=>{if(S.dicOn){ try{S.recog.start();}catch(e){S.dicOn=false;$id('db').classList.remove('on');} }};
   $id('db').addEventListener('click',()=>{
     if(!S.recog){toast('⚠ Dictare indisponibilă pe acest browser');return;}
     S.dicOn=!S.dicOn;
-    if(S.dicOn){S.recog.start();$id('db').classList.add('on');vib([10]);}
+    if(S.dicOn){ try{S.recog.start();$id('db').classList.add('on');vib([10]);}catch(e){S.dicOn=false;} }
     else{S.recog.stop();$id('db').classList.remove('on');}
   });
 }
@@ -902,6 +918,7 @@ document.addEventListener('visibilitychange',()=>{
 function startQR(){
   if(!('BarcodeDetector' in window))return;
   try{
+    if(S.qrTimer){clearInterval(S.qrTimer);S.qrTimer=null;}
     S.bcd=new BarcodeDetector({formats:['qr_code','ean_13','code_128','data_matrix','aztec']});
     S.qrTimer=setInterval(async()=>{
       const v=$id('vid');
@@ -925,19 +942,22 @@ function stopQR(){
 }
 
 // ── NFC ───────────────────────────────────────────
-let _nfcReader=null;
+let _nfcReader=null, _nfcAbort=null;
 async function toggleNFC(){
   if(!('NDEFReader' in window)){toast('⚠ NFC indisponibil pe acest dispozitiv',3000);return;}
   const btn=$id('b-nfc');
   if(btn.classList.contains('on')){
     btn.classList.remove('on');
     $id('nfcb').classList.remove('on');
+    if(_nfcReader) _nfcReader.onreading=null;
+    if(_nfcAbort){ try{_nfcAbort.abort();}catch(e){} _nfcAbort=null; }
     _nfcReader=null;
     toast('📡 NFC oprit'); return;
   }
   try{
+    _nfcAbort=new AbortController();
     _nfcReader=new NDEFReader();
-    await _nfcReader.scan();
+    await _nfcReader.scan({signal:_nfcAbort.signal});
     btn.classList.add('on');
     $id('nfcb').classList.add('on');
     _nfcReader.onreading=({message,serialNumber})=>{
@@ -956,7 +976,8 @@ async function toggleNFC(){
 
 // ── INDEXEDDB ─────────────────────────────────────
 function initDB(){
-  const req=indexedDB.open('ASFAN_FO',2);
+  let req;
+  try{ req=indexedDB.open('ASFAN_FO',2); }catch(e){ toast('⚠ Storage DB indisponibil',2000); return; }
   req.onupgradeneeded=e=>{
     const db=e.target.result;
     if(!db.objectStoreNames.contains('recs'))
@@ -991,6 +1012,7 @@ function saveRec(){
   }
   const tx=S.db.transaction('recs','readwrite');
   tx.objectStore('recs').add(rec);
+  tx.onabort=tx.onerror=()=>{ toast('⚠ Salvare eșuată (spațiu insuficient?) — JSON descărcat',3500); try{dlJSON(rec);}catch(e){} };
   tx.oncomplete=()=>{
     toast('💾 Raport salvat!'); vib([10,20,50]);
     refreshCnt();
@@ -1001,9 +1023,12 @@ function saveRec(){
 }
 function dlJSON(data){
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
-  a.download=`asfan_${data.ts.replace(/[T:]/g,'_')}.json`;
+  const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.href=u;
+  a.download=`asfan_${String(data.ts).replace(/[T:]/g,'_')}.json`;
+  document.body.appendChild(a);
   a.click();
+  setTimeout(()=>{a.remove();URL.revokeObjectURL(u);},10000);
 }
 
 // ── ARCHIVE ───────────────────────────────────────
@@ -1021,10 +1046,10 @@ function loadArch(){
       const az=r.ori?dg(r.ori.az).toFixed(0):'--';
       const el=r.ori?r.ori.bt.toFixed(1):'--';
       return `<div class="rec">
-        <div class="rts">${r.ts}</div>
+        <div class="rts">${esc(r.ts)}</div>
         <div class="rpos">${g.lat?`📍 ${g.lat.toFixed(5)}°N  ${g.lon.toFixed(5)}°E  ${g.alt?g.alt.toFixed(0)+'m':''}`:' GPS: N/A'}</div>
         <div class="raz">🧭 AZ:${az}° ${r.ori?dir(r.ori.az):''} | EL:${el}°${r.lux!=null?' | 💡'+r.lux.toFixed(0)+'lx':''}</div>
-        ${r.notes?`<div class="rnt">📝 ${r.notes}</div>`:''}
+        ${r.notes?`<div class="rnt">📝 ${esc(r.notes)}</div>`:''}
         <div class="rbt">
           ${r.photo?`<button onclick="viewPhoto(${r.id})">📸</button>`:''}
           ${r.audio?`<button onclick="playAudio(${r.id})">🔊</button>`:''}
@@ -1057,7 +1082,7 @@ function viewPhoto(id){
 function playAudio(id){
   getRecById(id,r=>{
     if(!r||!r.audio)return;
-    new Audio(r.audio).play();
+    new Audio(r.audio).play().catch(()=>toast('⚠ Redare imposibilă'));
     toast('🔊 Redare audio...');
   });
 }
@@ -1078,8 +1103,8 @@ async function shareRec(id){
       await navigator.share({title:'ASFAN Raport',text:txt}).catch(()=>{});
       toast('📤 Partajat!');
     }else{
-      await navigator.clipboard?.writeText(txt);
-      toast('📋 Copiat în clipboard!');
+      try{ await navigator.clipboard.writeText(txt); toast('📋 Copiat în clipboard!'); }
+      catch(e){ toast('⚠ Copierea în clipboard a eșuat',3000); }
     }
   });
 }
