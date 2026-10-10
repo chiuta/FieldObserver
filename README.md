@@ -38,6 +38,7 @@ ASFAN Field Observer (v1) este o aplicație single-file, gândită pentru telefo
 - **Stocare locală:** IndexedDB, baza `ASFAN_FO` (versiunea 2), magazia `recs` cu rapoartele (inclusiv foto și audio). Nu se folosește `localStorage`.
 - **Rețea:** aplicația nu conține apeluri `fetch` și are o politică CSP cu `connect-src 'self'`; nu contactează hosturi terțe. Linkurile „Patreon" și „Coffee" se deschid doar la clic.
 - Notă: dictarea vocală folosește funcția de recunoaștere vocală a browserului, care în unele browsere (de ex. Chrome) poate trimite audio către serviciul furnizorului browserului; aplicația nu controlează acest aspect.
+- **Date sensibile:** rapoartele conțin locație GPS, fotografii, înregistrări audio și note, stocate necriptat în IndexedDB pe dispozitiv; butonul „SHARE" și descărcarea JSON le pot scoate din aplicație. Ștergerea datelor site-ului șterge arhiva; exportați JSON pentru backup. Pe un telefon partajat sau pierdut, rapoartele pot fi citite de oricine are acces la profilul browserului.
 - Fără analitice.
 
 ## Rulare locală / offline
@@ -47,6 +48,10 @@ Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m
 ## Licență
 
 CC0 1.0 Universal (domeniu public) — vezi fișierul LICENSE
+
+## Audit
+
+2026-10-10: verificat că în cod nu există `fetch`/XHR/WebSocket sau resurse externe (cu permisiuni simulate, fără cereri de rețea). Numele aplicației din interfață și al bazei de date (`ASFAN_FO`) conține „ASFAN"; nu a fost modificat. Corectate zoom-ul blocat (viewport), contrastul și un element ascuns focusabil.
 
 ## Autor
 
