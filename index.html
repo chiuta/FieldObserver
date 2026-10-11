@@ -28,13 +28,13 @@
 /* Accesibilitate: inel de focus vizibil pentru navigare la tastatură. */
 :focus-visible{outline:2px solid #4a90d9;outline-offset:2px;border-radius:2px}
 </style>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' 'sha256-tUz0tY6Px8lEXnVwq9R/jwBs19U6GtDW/ns9f8iW7xE=' blob:; connect-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' blob: 'sha256-poKD4IfU1tgKEWgSnpqWSv46M55wH/OZfDVMsRG0pBc='; connect-src 'self'">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#020609">
-<title>ASFAN · Field Observer v1.0.1</title>
+<title>ASFAN · Field Observer v1.0.2</title>
 <style>
 :root{
   --bg0:#020609;--bg1:#040d14;--bg2:#071a24;--bg3:#0b2030;
@@ -129,6 +129,12 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
   display:flex;justify-content:space-between;align-items:center;
   font-size:11px;letter-spacing:.1em;flex-shrink:0}
 #ar-h button{background:none;border:none;color:var(--o);font-size:18px;cursor:pointer}
+#ar-t{display:flex;gap:6px;padding:6px;background:var(--bg1);border-bottom:1px solid var(--bdr);flex-wrap:wrap;flex-shrink:0}
+#ar-q{flex:1;min-width:130px;background:var(--bg3);border:1px solid var(--bdr);color:var(--txt);font-family:var(--f);font-size:12px;padding:6px 8px}
+#ar-t button{background:var(--bg3);border:1px solid var(--bdr);color:var(--txt);font-family:var(--f);font-size:10px;padding:6px 9px;cursor:pointer;letter-spacing:.05em}
+#ar-t button:active{background:var(--g);color:#000}
+.rpos a{color:var(--c)}
+.rempty{padding:20px;color:var(--dim);text-align:center;line-height:1.6}
 #ar-l{flex:1;overflow-y:auto;padding:6px}
 .rec{background:var(--bg2);border:1px solid var(--bdr);padding:8px 10px;margin-bottom:5px;font-size:10px}
 .rts{color:var(--g);letter-spacing:.06em}
@@ -195,7 +201,7 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
   padding:20px;">
   <div style="font-size:48px">🔭</div>
   <div style="font-size:12px;letter-spacing:.25em;color:var(--g)">ASFAN FIELD OBSERVER</div>
-  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1.0.1 · offline · ro</div>
+  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1.0.2 · offline · ro</div>
 
   <!-- PROTOCOL WARNING (afișat dinamic) -->
   <div id="sp-warn" style="display:none;background:#1a0a00;border:1px solid var(--o);
@@ -309,22 +315,29 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
 </div>
 
 <!-- ARCHIVE PANEL -->
-<div id="ar">
+<div id="ar" role="dialog" aria-modal="true" aria-label="Arhivă rapoarte">
   <div id="ar-h">
     <span>ARHIVĂ RAPOARTE (<span id="ar-cnt">0</span>)</span>
-    <button data-act="closeArch">✕</button>
+    <button data-act="closeArch" aria-label="Închide arhiva">✕</button>
+  </div>
+  <div id="ar-t">
+    <input id="ar-q" type="search" placeholder="🔎 caută în note sau dată" aria-label="Caută în rapoarte" autocomplete="off">
+    <button data-act="expAll" title="Exportă toate rapoartele (cu foto/audio) într-un fișier JSON">⬇ TOT (JSON)</button>
+    <button data-act="expCsv" title="Exportă tabelul fără foto/audio">⬇ CSV</button>
+    <button data-act="impJson" title="Importă un fișier JSON exportat anterior">⬆ IMPORT</button>
+    <input type="file" id="ar-fi" accept="application/json,.json" hidden>
   </div>
   <div id="ar-l"></div>
 </div>
 
 <!-- PHOTO VIEWER -->
 <div id="pv">
-  <button id="pv-close" data-act="closePv">✕</button>
+  <button id="pv-close" data-act="closePv" aria-label="Închide fotografia">✕</button>
   <img id="pv-img" src="" alt="">
 </div>
 
 <!-- TOAST -->
-<div id="ts"></div>
+<div id="ts" role="status" aria-live="polite"></div>
 </main>
 
 <script>
@@ -339,11 +352,12 @@ document.addEventListener('click',function(ev){
   var a=t.getAttribute('data-act'), id=t.getAttribute('data-id');
   var F={activateAll:activateAll,toggleCam:toggleCam,takePhoto:takePhoto,toggleAudioRec:toggleAudioRec,toggleTorch:toggleTorch,toggleNFC:toggleNFC,saveRec:saveRec,openArch:openArch,closeArch:closeArch,
     closePv:function(){document.getElementById('pv').classList.remove('on');},
-    viewPhoto:viewPhoto,playAudio:playAudio,shareRec:shareRec,dlRec:dlRec,delRec:delRec};
+    viewPhoto:viewPhoto,playAudio:playAudio,shareRec:shareRec,dlRec:dlRec,delRec:delRec,
+    expAll:expAll,expCsv:expCsv,impJson:function(){document.getElementById('ar-fi').click();}};
   if(F[a]) F[a](id!==null?Number(id):undefined);
 });
 // ═══════════════════════════════════════════════════
-// ASFAN FIELD OBSERVER v1.0.1 (2026-10-11)
+// ASFAN FIELD OBSERVER v1.0.2 (2026-10-11)
 // Single-file HTML · Offline · UI Română
 // Toate API-urile smartphone activate simultan
 // ═══════════════════════════════════════════════════
@@ -1046,46 +1060,123 @@ function saveRec(){
     speak('Raport salvat');
   };
 }
-function dlJSON(data){
+function dlJSON(data,fname){
   const a=document.createElement('a');
   const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
   a.href=u;
-  a.download=`asfan_${String(data.ts).replace(/[T:]/g,'_')}.json`;
+  a.download=fname||`asfan_${String(data.ts).replace(/[T:]/g,'_')}.json`;
   document.body.appendChild(a);
   a.click();
-  setTimeout(()=>{a.remove();URL.revokeObjectURL(u);},10000);
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),10000);
 }
 
 // ── ARCHIVE ───────────────────────────────────────
 $id('ar').querySelector('#ar-cnt').className='arch-cnt';
-function openArch(){$id('ar').classList.add('on');loadArch();}
-function closeArch(){$id('ar').classList.remove('on');}
+let ARCH=[];
+const fLat=v=>Math.abs(v).toFixed(5)+'°'+(v>=0?'N':'S');
+const fLon=v=>Math.abs(v).toFixed(5)+'°'+(v>=0?'E':'V');   // V = Vest (română)
+const isNum=v=>typeof v==='number'&&isFinite(v);
+function openArch(){$id('ar').classList.add('on');$id('ar-q').value='';loadArch();try{$id('ar-q').focus();}catch(e){}}
+function closeArch(){$id('ar').classList.remove('on');try{$id('b-ar').focus();}catch(e){}}
 function loadArch(){
-  if(!S.db){$id('ar-l').innerHTML='<div style="padding:20px;color:var(--dim);text-align:center">Baza de date indisponibilă</div>';return;}
+  if(!S.db){$id('ar-l').innerHTML='<div class="rempty">Baza de date indisponibilă</div>';return;}
   const tx=S.db.transaction('recs','readonly');
-  tx.objectStore('recs').getAll().onsuccess=e=>{
-    const list=[...e.target.result].reverse();
-    if(!list.length){$id('ar-l').innerHTML='<div style="padding:20px;color:var(--dim);text-align:center">Niciun raport salvat încă.</div>';return;}
-    $id('ar-l').innerHTML=list.map(r=>{
+  tx.objectStore('recs').getAll().onsuccess=e=>{ARCH=[...e.target.result].reverse();renderArch();};
+}
+function renderArch(){
+  const q=($id('ar-q').value||'').trim().toLowerCase();
+  if(!ARCH.length){$id('ar-l').innerHTML='<div class="rempty">Niciun raport salvat încă.<br>Apasă „SALVARE” în ecranul principal ca să păstrezi poziția, orientarea, lumina, nota și, dacă există, ultima fotografie sau înregistrare audio. Poți și importa un fișier JSON exportat anterior.</div>';return;}
+  const list=q?ARCH.filter(r=>((r.ts||'')+' '+(r.notes||'')+' '+(r.ori?dir(r.ori.az):'')).toLowerCase().includes(q)):ARCH;
+  if(!list.length){$id('ar-l').innerHTML='<div class="rempty">Niciun raport nu se potrivește căutării.</div>';return;}
+  $id('ar-l').innerHTML=list.map(r=>{
       const g=r.gps||{};
       const az=r.ori?dg(r.ori.az).toFixed(0):'--';
       const el=r.ori?r.ori.bt.toFixed(1):'--';
+      const hasPos=isNum(g.lat)&&isNum(g.lon);
       return `<div class="rec">
         <div class="rts">${esc(r.ts)}</div>
-        <div class="rpos">${g.lat?`📍 ${g.lat.toFixed(5)}°N  ${g.lon.toFixed(5)}°E  ${g.alt?g.alt.toFixed(0)+'m':''}`:' GPS: N/A'}</div>
-        <div class="raz">🧭 AZ:${az}° ${r.ori?dir(r.ori.az):''} | EL:${el}°${r.lux!=null?' | 💡'+r.lux.toFixed(0)+'lx':''}</div>
+        <div class="rpos">${hasPos?`📍 ${fLat(g.lat)}  ${fLon(g.lon)}  ${isNum(g.alt)?g.alt.toFixed(0)+'m':''} <a href="geo:${g.lat.toFixed(6)},${g.lon.toFixed(6)}" title="Deschide în aplicația de hărți a telefonului">🗺 hartă</a>`:' GPS: N/A'}</div>
+        <div class="raz">🧭 AZ:${az}° ${r.ori?dir(r.ori.az):''} | EL:${el}°${isNum(r.lux)?' | 💡'+r.lux.toFixed(0)+'lx':''}</div>
         ${r.notes?`<div class="rnt">📝 ${esc(r.notes)}</div>`:''}
         <div class="rbt">
-          ${r.photo?`<button data-act="viewPhoto" data-id="${r.id}">📸</button>`:''}
-          ${r.audio?`<button data-act="playAudio" data-id="${r.id}">🔊</button>`:''}
+          ${r.photo?`<button data-act="viewPhoto" data-id="${r.id}" aria-label="Vezi fotografia">📸</button>`:''}
+          ${r.audio?`<button data-act="playAudio" data-id="${r.id}" aria-label="Redă înregistrarea audio">🔊</button>`:''}
           <button data-act="shareRec" data-id="${r.id}">📤 SHARE</button>
           <button data-act="dlRec" data-id="${r.id}">⬇ JSON</button>
-          <button data-act="delRec" data-id="${r.id}">🗑</button>
+          <button data-act="delRec" data-id="${r.id}" aria-label="Șterge raportul">🗑</button>
         </div>
       </div>`;
-    }).join('');
-  };
+  }).join('');
 }
+$id('ar-q').addEventListener('input',renderArch);
+function allRecs(cb){
+  if(!S.db){toast('⚠ Baza de date indisponibilă');return;}
+  S.db.transaction('recs','readonly').objectStore('recs').getAll().onsuccess=e=>cb([...e.target.result]);
+}
+function expAll(){
+  allRecs(list=>{
+    if(!list.length){toast('Nimic de exportat');return;}
+    dlJSON({app:'ASFAN Field Observer',format:1,exported:stamp(),records:list},'asfan_arhiva_'+stamp().replace(/[T:]/g,'_')+'.json');
+    toast('⬇ '+list.length+' rapoarte exportate');
+  });
+}
+function csvCell(v){
+  let t=v==null?'':String(v);
+  if(/^[=+\-@\t\r]/.test(t))t="'"+t;           // previne interpretarea ca formulă în Excel/Sheets
+  return /[",\n\r;]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t;
+}
+function expCsv(){
+  allRecs(list=>{
+    if(!list.length){toast('Nimic de exportat');return;}
+    const num=v=>isNum(v)?v:'';
+    const rows=[['ts','lat','lon','alt_m','precizie_m','azimut_deg','elevatie_deg','lux','baterie_pct','nota','foto','audio']];
+    list.forEach(r=>{const g=r.gps||{},o=r.ori||{},b=r.bat||{};
+      rows.push([r.ts,num(g.lat),num(g.lon),num(g.alt),num(g.acc),isNum(o.az)?dg(o.az).toFixed(1):'',num(o.bt),num(r.lux),num(b.lvl),r.notes||'',r.photo?'da':'',r.audio?'da':'']);});
+    const csv='﻿'+rows.map(r=>r.map((c,i)=>i===0||i===9?csvCell(c):(c===''?'':String(c))).join(',')).join('\r\n');
+    const a=document.createElement('a'),u=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    a.href=u;a.download='asfan_rapoarte_'+stamp().replace(/[T:]/g,'_')+'.csv';document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),10000);
+    toast('⬇ CSV: '+list.length+' rânduri');
+  });
+}
+// Import: se acceptă doar câmpurile cunoscute, cu tipuri verificate (fișierul e tratat ca nesigur)
+function cleanRec(r){
+  if(!r||typeof r!=='object'||typeof r.ts!=='string')return null;
+  const n=v=>isNum(v)?v:null, st=(v,m)=>typeof v==='string'?v.slice(0,m):'';
+  const uri=(v,p)=>(typeof v==='string'&&v.startsWith(p)&&v.length<=14e6)?v:null;
+  const g=r.gps||{},o=r.ori||{},m=r.mot||{},b=r.bat||{},w=r.net||{};
+  return {ts:st(r.ts,40),
+    gps:{lat:n(g.lat),lon:n(g.lon),alt:n(g.alt),acc:n(g.acc),spd:n(g.spd)},
+    ori:{az:isNum(o.az)?o.az:0,bt:isNum(o.bt)?o.bt:0,gm:isNum(o.gm)?o.gm:0,abs:!!o.abs},
+    mot:{ax:isNum(m.ax)?m.ax:0,ay:isNum(m.ay)?m.ay:0,az:isNum(m.az)?m.az:0},
+    lux:n(r.lux),bat:{lvl:n(b.lvl),chg:!!b.chg},net:{type:st(w.type,20),eff:st(w.eff,20)},
+    notes:st(r.notes,2000),photo:uri(r.photo,'data:image/'),audio:uri(r.audio,'data:audio/')};
+}
+$id('ar-fi').addEventListener('change',function(){
+  const f=this.files&&this.files[0]; this.value='';
+  if(!f)return;
+  if(!S.db){toast('⚠ Baza de date indisponibilă');return;}
+  if(f.size>200*1024*1024){toast('⚠ Fișier prea mare');return;}
+  const fr=new FileReader();
+  fr.onload=()=>{
+    let data;try{data=JSON.parse(fr.result);}catch(e){toast('⚠ Fișier JSON invalid',3000);return;}
+    const arr=Array.isArray(data)?data:(data&&Array.isArray(data.records)?data.records:[data]);
+    const recs=arr.slice(0,2000).map(cleanRec).filter(Boolean);
+    if(!recs.length){toast('⚠ Niciun raport valid în fișier',3000);return;}
+    const tx=S.db.transaction('recs','readwrite'),st=tx.objectStore('recs');
+    recs.forEach(r=>st.add(r));
+    tx.oncomplete=()=>{toast('⬆ '+recs.length+' rapoarte importate');refreshCnt();loadArch();};
+    tx.onabort=tx.onerror=()=>toast('⚠ Import eșuat (spațiu insuficient?)',3500);
+  };
+  fr.onerror=()=>toast('⚠ Fișierul nu poate fi citit');
+  fr.readAsText(f);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  if($id('pv').classList.contains('on'))$id('pv').classList.remove('on');
+  else if($id('ar').classList.contains('on'))closeArch();
+});
 function delRec(id){
   if(!S.db||!confirm('Ștergi raportul?'))return;
   const tx=S.db.transaction('recs','readwrite');
