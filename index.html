@@ -28,13 +28,13 @@
 /* Accesibilitate: inel de focus vizibil pentru navigare la tastatură. */
 :focus-visible{outline:2px solid #4a90d9;outline-offset:2px;border-radius:2px}
 </style>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' blob: 'sha256-poKD4IfU1tgKEWgSnpqWSv46M55wH/OZfDVMsRG0pBc='; connect-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' blob: 'sha256-8V4CLzLHlwtQ5NW7BihapOvoW3MwwKxP+hzQznwZO80='; connect-src 'self'">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#020609">
-<title>ASFAN · Field Observer v1.0.2</title>
+<title>ASFAN · Field Observer v1.0.3</title>
 <style>
 :root{
   --bg0:#020609;--bg1:#040d14;--bg2:#071a24;--bg3:#0b2030;
@@ -201,7 +201,7 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
   padding:20px;">
   <div style="font-size:48px">🔭</div>
   <div style="font-size:12px;letter-spacing:.25em;color:var(--g)">ASFAN FIELD OBSERVER</div>
-  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1.0.2 · offline · ro</div>
+  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1.0.3 · offline · ro</div>
 
   <!-- PROTOCOL WARNING (afișat dinamic) -->
   <div id="sp-warn" style="display:none;background:#1a0a00;border:1px solid var(--o);
@@ -214,6 +214,7 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
     cursor:pointer;border-radius:2px;margin-top:4px;">
     ▶ ACTIVARE COMPLETĂ
   </button>
+  <button id="btn-skip" data-act="skipSplash" style="background:none;color:var(--dim);border:1px solid var(--bdr);font-family:var(--f);font-size:10px;letter-spacing:.12em;padding:9px 18px;cursor:pointer;border-radius:2px;">CONTINUĂ FĂRĂ CAMERĂ</button>
 
   <div id="sp-st" style="font-size:9px;color:var(--dim);letter-spacing:.07em;
     min-height:14px;text-align:center;max-width:300px;line-height:1.6;"></div>
@@ -350,14 +351,14 @@ document.addEventListener('DOMContentLoaded',function(){
 document.addEventListener('click',function(ev){
   var t=ev.target&&ev.target.closest?ev.target.closest('[data-act]'):null; if(!t) return;
   var a=t.getAttribute('data-act'), id=t.getAttribute('data-id');
-  var F={activateAll:activateAll,toggleCam:toggleCam,takePhoto:takePhoto,toggleAudioRec:toggleAudioRec,toggleTorch:toggleTorch,toggleNFC:toggleNFC,saveRec:saveRec,openArch:openArch,closeArch:closeArch,
+  var F={activateAll:activateAll,skipSplash:skipSplash,toggleCam:toggleCam,takePhoto:takePhoto,toggleAudioRec:toggleAudioRec,toggleTorch:toggleTorch,toggleNFC:toggleNFC,saveRec:saveRec,openArch:openArch,closeArch:closeArch,
     closePv:function(){document.getElementById('pv').classList.remove('on');},
     viewPhoto:viewPhoto,playAudio:playAudio,shareRec:shareRec,dlRec:dlRec,delRec:delRec,
     expAll:expAll,expCsv:expCsv,impJson:function(){document.getElementById('ar-fi').click();}};
   if(F[a]) F[a](id!==null?Number(id):undefined);
 });
 // ═══════════════════════════════════════════════════
-// ASFAN FIELD OBSERVER v1.0.2 (2026-10-11)
+// ASFAN FIELD OBSERVER v1.0.3 (2026-10-11)
 // Single-file HTML · Offline · UI Română
 // Toate API-urile smartphone activate simultan
 // ═══════════════════════════════════════════════════
@@ -740,6 +741,11 @@ function activateAll(){
   })();
 }
 
+function skipSplash(){
+  const sp=document.getElementById('splash'); sp.style.display='none';
+  try{reqOriPerm();reqMotPerm();}catch(e){}
+  toast('Fără cameră: senzorii disponibili rămân activi; reia din butonul START',3500);
+}
 // Diagnostics protocol la încărcare
 (function checkProto(){
   const proto=location.protocol;
@@ -1132,7 +1138,7 @@ function expCsv(){
     const num=v=>isNum(v)?v:'';
     const rows=[['ts','lat','lon','alt_m','precizie_m','azimut_deg','elevatie_deg','lux','baterie_pct','nota','foto','audio']];
     list.forEach(r=>{const g=r.gps||{},o=r.ori||{},b=r.bat||{};
-      rows.push([r.ts,num(g.lat),num(g.lon),num(g.alt),num(g.acc),isNum(o.az)?dg(o.az).toFixed(1):'',num(o.bt),num(r.lux),num(b.lvl),r.notes||'',r.photo?'da':'',r.audio?'da':'']);});
+      rows.push([r.ts,num(g.lat),num(g.lon),num(g.alt),num(g.acc),isNum(o.az)?dg(o.az).toFixed(1):'',num(o.bt),num(r.lux),isNum(b.lvl)?Math.round(b.lvl*100):'',r.notes||'',r.photo?'da':'',r.audio?'da':'']);});
     const csv='﻿'+rows.map(r=>r.map((c,i)=>i===0||i===9?csvCell(c):(c===''?'':String(c))).join(',')).join('\r\n');
     const a=document.createElement('a'),u=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
     a.href=u;a.download='asfan_rapoarte_'+stamp().replace(/[T:]/g,'_')+'.csv';document.body.appendChild(a);a.click();a.remove();

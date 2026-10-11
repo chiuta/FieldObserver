@@ -10,12 +10,12 @@ Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră,
 
 ## Ce este
 
-ASFAN Field Observer (v1.0.2) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
+ASFAN Field Observer (v1.0.3) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
 
 ## Funcții
 
 - Bară de stare: ceas, lumină (lux), rețea, nivel baterie, coordonate GPS.
-- Buton „▶ ACTIVARE COMPLETĂ" care cere permisiunile necesare dintr-un singur gest; „RESET PERMISIUNI" pentru reluare.
+- Buton „▶ ACTIVARE COMPLETĂ" care cere permisiunile necesare dintr-un singur gest; „RESET PERMISIUNI" pentru reluare; „CONTINUĂ FĂRĂ CAMERĂ” deschide aplicația și când camera/microfonul nu sunt disponibile (desktop, file://).
 - Vizor cu cameră (cameră spate/față; dublă atingere schimbă camera), cu suprapunere grafică.
 - Panouri: **BUSOLĂ** (azimut și direcție), **MIȘCARE** (accelerație m/s², viteză unghiulară °/s), **AUDIO** (nivel în dB), **LUMINĂ** (lux, dacă senzorul există), **BATERIE**, **REȚEA**.
 - Butoane: START (cameră), **FOTO**, **AUDIO** (înregistrare), **TORȚĂ** (dacă dispozitivul o permite), **NFC**, **SALVARE**, **ARHIVĂ**.
@@ -48,6 +48,10 @@ ASFAN Field Observer (v1.0.2) este o aplicație single-file, gândită pentru te
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
 ## Istoric / Changelog
+
+### 11 octombrie 2026 (a treia trecere) — versiunea 1.0.3
+- Export CSV: coloana `baterie_pct` scria fracția 0–1 (1 pentru 100%); acum scrie procentul (100).
+- Ecranul de activare nu mai blochează aplicația când camera nu e disponibilă (file://, desktop): butonul „CONTINUĂ FĂRĂ CAMERĂ”. CSP: hash recalculat.
 
 ### 11 octombrie 2026 (a doua trecere) — versiunea 1.0.2
 - Arhivă: căutare, export complet JSON și CSV (celule protejate contra interpretării ca formule), import JSON cu validarea câmpurilor, coordonate cu emisfere corecte (N/S, E/V; înainte „°N/°E” fix, chiar și pentru valori negative) și legătură „hartă”, mesaj de arhivă goală cu îndrumare, `aria-label` pe butoanele cu emoji, dialog cu focus și Esc, toast ca regiune `status`. CSP: hash recalculat. Captură actualizată.
