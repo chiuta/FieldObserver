@@ -28,13 +28,13 @@
 /* Accesibilitate: inel de focus vizibil pentru navigare la tastatură. */
 :focus-visible{outline:2px solid #4a90d9;outline-offset:2px;border-radius:2px}
 </style>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' 'unsafe-inline' blob:; connect-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' 'sha256-tUz0tY6Px8lEXnVwq9R/jwBs19U6GtDW/ns9f8iW7xE=' blob:; connect-src 'self'">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#020609">
-<title>ASFAN · Field Observer v1</title>
+<title>ASFAN · Field Observer v1.0.1</title>
 <style>
 :root{
   --bg0:#020609;--bg1:#040d14;--bg2:#071a24;--bg3:#0b2030;
@@ -44,6 +44,10 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg0)}
+#tf-donate{bottom:auto !important;top:46%;right:8px}
+#hd{flex-shrink:0}
+#mn{flex:1;min-height:0;display:flex;flex-direction:column}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;color:var(--txt)}
 
 /* STATUS BAR */
@@ -162,6 +166,8 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
 </head>
 <body>
 
+<header id="hd">
+<h1 class="sr">ASFAN Field Observer</h1>
 <!-- STATUS BAR -->
 <div id="sb">
   <div class="si"><span id="s-time">--:--:--</span></div>
@@ -178,6 +184,9 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
   <span id="g-coord">GPS: inițializare...</span>
   <span id="g-meta"></span>
 </div>
+</header>
+
+<main id="mn">
 
 <!-- SPLASH -->
 <div id="splash" style="
@@ -186,14 +195,14 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
   padding:20px;">
   <div style="font-size:48px">🔭</div>
   <div style="font-size:12px;letter-spacing:.25em;color:var(--g)">ASFAN FIELD OBSERVER</div>
-  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1 · offline · ro</div>
+  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1.0.1 · offline · ro</div>
 
   <!-- PROTOCOL WARNING (afișat dinamic) -->
   <div id="sp-warn" style="display:none;background:#1a0a00;border:1px solid var(--o);
     color:var(--o);font-size:10px;padding:10px 14px;max-width:300px;text-align:center;
     letter-spacing:.05em;line-height:1.6;border-radius:2px;"></div>
 
-  <button id="btn-all" onclick="activateAll()" style="
+  <button id="btn-all" data-act="activateAll" style="
     background:var(--g);color:#000;border:none;font-family:var(--f);
     font-size:12px;letter-spacing:.2em;padding:14px 32px;
     cursor:pointer;border-radius:2px;margin-top:4px;">
@@ -276,25 +285,25 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
 
 <!-- ACTION BAR -->
 <div id="ab">
-  <button class="ab yon" id="b-cam" onclick="toggleCam()">
+  <button class="ab yon" id="b-cam" data-act="toggleCam">
     <span class="ic">📷</span><span>START</span>
   </button>
-  <button class="ab" id="b-ph" onclick="takePhoto()">
+  <button class="ab" id="b-ph" data-act="takePhoto">
     <span class="ic">📸</span><span>FOTO</span>
   </button>
-  <button class="ab ron" id="b-rec" onclick="toggleAudioRec()">
+  <button class="ab ron" id="b-rec" data-act="toggleAudioRec">
     <span class="ic">🎙</span><span>AUDIO</span>
   </button>
-  <button class="ab" id="b-trc" onclick="toggleTorch()">
+  <button class="ab" id="b-trc" data-act="toggleTorch">
     <span class="ic">🔦</span><span>TORȚĂ</span>
   </button>
-  <button class="ab" id="b-nfc" onclick="toggleNFC()">
+  <button class="ab" id="b-nfc" data-act="toggleNFC">
     <span class="ic">📡</span><span>NFC</span>
   </button>
-  <button class="ab oon" id="b-sv" onclick="saveRec()">
+  <button class="ab oon" id="b-sv" data-act="saveRec">
     <span class="ic">💾</span><span>SALVARE</span>
   </button>
-  <button class="ab" id="b-ar" onclick="openArch()">
+  <button class="ab" id="b-ar" data-act="openArch">
     <span class="ic">📂</span><span>ARHIVĂ</span>
   </button>
 </div>
@@ -303,23 +312,38 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
 <div id="ar">
   <div id="ar-h">
     <span>ARHIVĂ RAPOARTE (<span id="ar-cnt">0</span>)</span>
-    <button onclick="closeArch()">✕</button>
+    <button data-act="closeArch">✕</button>
   </div>
   <div id="ar-l"></div>
 </div>
 
 <!-- PHOTO VIEWER -->
 <div id="pv">
-  <button id="pv-close" onclick="document.getElementById('pv').classList.remove('on')">✕</button>
+  <button id="pv-close" data-act="closePv">✕</button>
   <img id="pv-img" src="" alt="">
 </div>
 
 <!-- TOAST -->
 <div id="ts"></div>
+</main>
 
 <script>
+
+// ── Handler delegat (fără onclick inline; CSP fără 'unsafe-inline' pentru scripturi) ──
+// pe ecran îngust pastila de sprijin pornește restrânsă (nu acoperă bara de butoane)
+document.addEventListener('DOMContentLoaded',function(){
+  try{var cb=document.getElementById('tf-donate-cb'); if(cb&&window.matchMedia('(max-width:560px)').matches) cb.checked=true;}catch(e){}
+});
+document.addEventListener('click',function(ev){
+  var t=ev.target&&ev.target.closest?ev.target.closest('[data-act]'):null; if(!t) return;
+  var a=t.getAttribute('data-act'), id=t.getAttribute('data-id');
+  var F={activateAll:activateAll,toggleCam:toggleCam,takePhoto:takePhoto,toggleAudioRec:toggleAudioRec,toggleTorch:toggleTorch,toggleNFC:toggleNFC,saveRec:saveRec,openArch:openArch,closeArch:closeArch,
+    closePv:function(){document.getElementById('pv').classList.remove('on');},
+    viewPhoto:viewPhoto,playAudio:playAudio,shareRec:shareRec,dlRec:dlRec,delRec:delRec};
+  if(F[a]) F[a](id!==null?Number(id):undefined);
+});
 // ═══════════════════════════════════════════════════
-// ASFAN FIELD OBSERVER v1
+// ASFAN FIELD OBSERVER v1.0.1 (2026-10-11)
 // Single-file HTML · Offline · UI Română
 // Toate API-urile smartphone activate simultan
 // ═══════════════════════════════════════════════════
@@ -690,6 +714,7 @@ function activateAll(){
 
     // Fade out splash
     log('✓ toți senzorii activi');
+    btn.disabled=false; btn.textContent='✓ ACTIV';
     vib([10,20,50,20,10]);
     await new Promise(r=>setTimeout(r,500));
     const sp=document.getElementById('splash');
@@ -1051,11 +1076,11 @@ function loadArch(){
         <div class="raz">🧭 AZ:${az}° ${r.ori?dir(r.ori.az):''} | EL:${el}°${r.lux!=null?' | 💡'+r.lux.toFixed(0)+'lx':''}</div>
         ${r.notes?`<div class="rnt">📝 ${esc(r.notes)}</div>`:''}
         <div class="rbt">
-          ${r.photo?`<button onclick="viewPhoto(${r.id})">📸</button>`:''}
-          ${r.audio?`<button onclick="playAudio(${r.id})">🔊</button>`:''}
-          <button onclick="shareRec(${r.id})">📤 SHARE</button>
-          <button onclick="dlRec(${r.id})">⬇ JSON</button>
-          <button onclick="delRec(${r.id})">🗑</button>
+          ${r.photo?`<button data-act="viewPhoto" data-id="${r.id}">📸</button>`:''}
+          ${r.audio?`<button data-act="playAudio" data-id="${r.id}">🔊</button>`:''}
+          <button data-act="shareRec" data-id="${r.id}">📤 SHARE</button>
+          <button data-act="dlRec" data-id="${r.id}">⬇ JSON</button>
+          <button data-act="delRec" data-id="${r.id}">🗑</button>
         </div>
       </div>`;
     }).join('');
@@ -1278,7 +1303,7 @@ drawCompass(0); drawMotion(0,0,9.81);
 drawAudio(new Uint8Array(128).fill(0));
 </script>
 <!-- tf-donate: sprijin voluntar (Patreon + Buy Me a Coffee) — self-contained, fără resurse externe, fără JS -->
-<div id="tf-donate" aria-label="Sprijină autorul">
+<div id="tf-donate" role="complementary" aria-label="Sprijină autorul">
 <style>
 #tf-donate{position:fixed;right:14px;bottom:14px;z-index:2147483600;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1}
 #tf-donate *{box-sizing:border-box}

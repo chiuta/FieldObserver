@@ -4,11 +4,13 @@ Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră,
 
 **Live:** https://chiuta.github.io/FieldObserver/
 
+**Ultima actualizare:** 11 octombrie 2026
+
 ![Captura de ecran](screenshot.png)
 
 ## Ce este
 
-ASFAN Field Observer (v1) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
+ASFAN Field Observer (v1.0.1) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
 
 ## Funcții
 
@@ -44,6 +46,15 @@ ASFAN Field Observer (v1) este o aplicație single-file, gândită pentru telefo
 ## Rulare locală / offline
 
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
+
+## Istoric / Changelog
+
+### 11 octombrie 2026
+- Versiune 1.0.1 (în titlu, ecranul de start și comentariul din cod).
+- Accesibilitate: antet (`<header>` cu `<h1>`), `<main>` și widgetul de sprijin ca reper; axe-core raportează 0 încălcări la 1280 și 360 px.
+- Pastila Patreon/Coffee nu mai acoperă bara de butoane (AUDIO, TORȚĂ, NFC, ARHIVĂ): stă la dreapta, la mijlocul vizorului, iar pe ecran îngust pornește restrânsă.
+- Butonul „ACTIVARE COMPLETĂ” rămânea pe „⏳...” după activare: acum arată „✓ ACTIV”.
+- Securitate: cele 15 handler-e `onclick` inline au fost înlocuite cu un handler delegat; CSP folosește hash SHA-256 pentru script, fără `'unsafe-inline'` în `script-src`.
 
 ## Licență
 
