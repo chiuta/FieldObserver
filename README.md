@@ -1,10 +1,10 @@
 # Field Observer
 
+**Versiune:** 1.0.4 · **Ultima actualizare:** 12 octombrie 2026
+
 Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră, NFC și rapoarte salvate local.
 
 **Live:** https://chiuta.github.io/FieldObserver/
-
-**Ultima actualizare:** 11 octombrie 2026
 
 ![Captura de ecran](screenshot.png)
 
@@ -48,6 +48,9 @@ ASFAN Field Observer (v1.0.3) este o aplicație single-file, gândită pentru te
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
 ## Istoric / Changelog
+
+### 12 octombrie 2026 — versiunea 1.0.4
+- 1.0.4 — 2026-10-12: versiunea și data ultimei actualizări sunt afișate în aplicație
 
 ### 11 octombrie 2026 (a treia trecere) — versiunea 1.0.3
 - Export CSV: coloana `baterie_pct` scria fracția 0–1 (1 pentru 100%); acum scrie procentul (100).

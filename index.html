@@ -28,13 +28,15 @@
 /* Accesibilitate: inel de focus vizibil pentru navigare la tastatură. */
 :focus-visible{outline:2px solid #4a90d9;outline-offset:2px;border-radius:2px}
 </style>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' blob: 'sha256-8V4CLzLHlwtQ5NW7BihapOvoW3MwwKxP+hzQznwZO80='; connect-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; script-src 'self' blob: 'sha256-gieXwQbiNYdegK1SotsqZMZpDPZ8jNHHj2k9pHazIL8='; connect-src 'self'">
+<meta name="application-version" content="1.0.4">
+<meta name="last-updated" content="2026-10-12">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#020609">
-<title>ASFAN · Field Observer v1.0.3</title>
+<title>ASFAN · Field Observer v1.0.4</title>
 <style>
 :root{
   --bg0:#020609;--bg1:#040d14;--bg2:#071a24;--bg3:#0b2030;
@@ -201,7 +203,7 @@ body{display:flex;flex-direction:column;font-family:var(--f);font-size:12px;colo
   padding:20px;">
   <div style="font-size:48px">🔭</div>
   <div style="font-size:12px;letter-spacing:.25em;color:var(--g)">ASFAN FIELD OBSERVER</div>
-  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)">v1.0.3 · offline · ro</div>
+  <div style="font-size:9px;letter-spacing:.12em;color:var(--dim)"><span id="app-version">v 1.0.4 · 2026-10-12</span> · offline · ro</div>
 
   <!-- PROTOCOL WARNING (afișat dinamic) -->
   <div id="sp-warn" style="display:none;background:#1a0a00;border:1px solid var(--o);
@@ -358,7 +360,7 @@ document.addEventListener('click',function(ev){
   if(F[a]) F[a](id!==null?Number(id):undefined);
 });
 // ═══════════════════════════════════════════════════
-// ASFAN FIELD OBSERVER v1.0.3 (2026-10-11)
+// ASFAN FIELD OBSERVER v1.0.4 (2026-10-12)
 // Single-file HTML · Offline · UI Română
 // Toate API-urile smartphone activate simultan
 // ═══════════════════════════════════════════════════
