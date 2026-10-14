@@ -87,7 +87,7 @@ await ctx.close();
   await m.p.click('#b-ar'); await m.p.waitForTimeout(300);
   t('360 px: arhiva fără depășire', await m.p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)); t('360 px: fără erori', m.errs.length === 0, m.errs); await m.ctx.close(); }
 { const m = await mk(); const html = fs.readFileSync(path.join(HERE, '..', 'index.html'), 'utf8').replace(/<!--fff:kit:start[\s\S]*?<!--fff:kit:end-->/, '');
-  const tmp = path.join(HERE, '_nokit.tmp.html'); fs.writeFileSync(tmp, html); await m.p.goto('file://' + tmp); await m.p.waitForTimeout(1500); await m.p.click('#btn-skip'); await m.p.click('#b-ar'); await m.p.waitForTimeout(300);
+  const tmp = path.join(HERE, '..', '_nokit.tmp.html'); /* în directorul aplicației, ca manifestul și iconițele relative să existe */ fs.writeFileSync(tmp, html); await m.p.goto('file://' + tmp); await m.p.waitForTimeout(1500); await m.p.click('#btn-skip'); await m.p.click('#b-ar'); await m.p.waitForTimeout(300);
   t('fără kit: nicio eroare, fără buton Transparență', m.errs.length === 0 && !(await m.p.isVisible('#ar-lbl')), m.errs); await m.ctx.close(); fs.unlinkSync(tmp); }
 await b.close();
 console.log(`\n${ok} ok / ${bad} eșuate`); process.exit(bad ? 1 : 0);
