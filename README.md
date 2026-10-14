@@ -1,6 +1,6 @@
 # Field Observer
 
-**Versiune:** 1.0.4 · **Ultima actualizare:** 12 octombrie 2026
+**Versiune:** 1.1.0 · **Ultima actualizare:** 14 octombrie 2026
 
 Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră, NFC și rapoarte salvate local.
 
@@ -10,7 +10,7 @@ Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră,
 
 ## Ce este
 
-ASFAN Field Observer (v1.0.3) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
+ASFAN Field Observer (v1.1.0) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
 
 ## Funcții
 
@@ -23,6 +23,25 @@ ASFAN Field Observer (v1.0.3) este o aplicație single-file, gândită pentru te
 - Câmp de notă cu dictare vocală (`ro-RO`, dacă browserul oferă recunoaștere vocală), confirmări vocale („Raport salvat") și vibrații.
 - Wake Lock pentru a ține ecranul aprins, acolo unde este disponibil.
 - Arhivă de rapoarte: vizualizare foto, redare audio, partajare (Web Share sau copiere în clipboard), descărcare JSON, ștergere; căutare după notă/dată, export al întregii arhive (JSON cu foto/audio) sau al tabelului (CSV, fără media), import de JSON exportat anterior (câmpuri verificate), coordonate cu N/S și E/V și legătură „hartă” (`geo:`, deschide aplicația de hărți a telefonului), Esc închide panoul.
+
+## Funcții noi (1.1.0)
+
+- **Traseu GPS** (buton 🥾 TRASEU din bara de jos): înregistrează pozițiile cât timp pagina rămâne deschisă și activă. Se adaugă un punct la cel puțin 5 m față de precedentul și se ignoră pozițiile cu precizie mai slabă de 100 m; limita este de 50 000 de puncte pe traseu. Traseul se salvează treptat în IndexedDB (magazia `tracks`). **Limită:** browserele nu oferă GPS unei pagini aflate în fundal sau cu ecranul stins; în acel caz punctele lipsesc din intervalul respectiv (nu se interpolează nimic).
+- **Export GPX 1.1** (arhivă → ⬇ GPX): pozițiile rapoartelor devin puncte (`wpt`, cu altitudine, ora, nota, azimutul și precizia în descriere), iar traseele devin `trk`/`trkseg`. Se deschide în orice program de hărți sau GPS care citește GPX. Rapoartele fără GPS sunt omise (nu se inventează coordonate).
+- **Pachet `.fff.json`** (arhivă → ⬇ .fff.json): toată arhiva (rapoarte, cu foto/audio, și trasee) într-un fișier de format `fff-bundle`, importabil tot din arhivă (⬆ IMPORT, care acceptă acum și acest format; se verifică `app`). **Notă:** copia de siguranță din fereastra „Transparență” a kitului lucrează doar cu `localStorage`, iar aplicația nu îl folosește; pentru arhivă folosiți butoanele din panoul Arhivă.
+- **Cod QR pe raport** (▦ QR la fiecare raport): codul conține fie poziția (`geo:lat,lon`, pe care telefonul o deschide în aplicația de hărți), fie un text scurt cu data, poziția, azimutul și nota (primele 300 de caractere). Generat local.
+- **Tipărire** (arhivă → 🖨 TIPĂREȘTE): listă curată, fundal alb, fără butoane și fără fotografii.
+- **Transparență** (arhivă → ℹ TRANSPARENȚĂ): fereastra standard „fără frontiere” cu rețeaua (0 cereri externe), stocarea, permisiunile și verificarea fișierului prin SHA-256.
+
+Interfața rămâne **numai în română** (aplicația nu are sistem de limbi); textele noi sunt tot în română.
+
+## Kit „fff-kit”
+
+Module lipite în `index.html`: `core`, `label`, `bundle`, `qr` (generator de cod QR, fără rețea). Fără ele aplicația funcționează la fel, dar fără butonul QR și fără fereastra Transparență (testat). Fișierul `app.json` descrie rețeaua, permisiunile și SHA-256 al fișierului.
+
+## Teste
+
+`node tests/fff-r8.test.mjs` (Playwright, rețea blocată): traseu cu poziții simulate prin contextul de test (API-ul real de geolocalizare al browserului), GPX (XML bine format, caractere speciale), pachet `.fff.json` (export, import, respingerea unui pachet străin), cod QR decodat înapoi cu decodorul kitului, tipărire, axe-core 0 violări (inclusiv dialoguri), 360 px, fără kit.
 
 ## Manual de utilizare
 
@@ -37,7 +56,7 @@ ASFAN Field Observer (v1.0.3) este o aplicație single-file, gândită pentru te
 
 ## Confidențialitate și rețea
 
-- **Stocare locală:** IndexedDB, baza `ASFAN_FO` (versiunea 2), magazia `recs` cu rapoartele (inclusiv foto și audio). Nu se folosește `localStorage`.
+- **Stocare locală:** IndexedDB, baza `ASFAN_FO` (versiunea 3), magaziile `recs` (rapoartele, inclusiv foto și audio) și `tracks` (traseele GPS, de la 1.1.0; baza veche se actualizează automat, rapoartele rămân). Nu se folosește `localStorage`.
 - **Rețea:** aplicația nu conține apeluri `fetch` și are o politică CSP cu `connect-src 'self'`; nu contactează hosturi terțe. Linkurile „Patreon" și „Coffee" se deschid doar la clic.
 - Notă: dictarea vocală folosește funcția de recunoaștere vocală a browserului, care în unele browsere (de ex. Chrome) poate trimite audio către serviciul furnizorului browserului; aplicația nu controlează acest aspect.
 - **Date sensibile:** rapoartele conțin locație GPS, fotografii, înregistrări audio și note, stocate necriptat în IndexedDB pe dispozitiv; butonul „SHARE" și descărcarea JSON le pot scoate din aplicație. Ștergerea datelor site-ului șterge arhiva; exportați JSON pentru backup. Pe un telefon partajat sau pierdut, rapoartele pot fi citite de oricine are acces la profilul browserului.
@@ -48,6 +67,9 @@ ASFAN Field Observer (v1.0.3) este o aplicație single-file, gândită pentru te
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
 ## Istoric / Changelog
+
+### 14 octombrie 2026 — versiunea 1.1.0
+- Nou: traseu GPS, export GPX 1.1, pachet `.fff.json` (export/import), cod QR pe raport (poziție sau text), tipărirea arhivei, fereastra „Transparență” (fff-kit: core, label, bundle, qr). Baza IndexedDB trece la versiunea 3 (magazie nouă `tracks`). Testele noi: `tests/fff-r8.test.mjs`. CSP: hash-ul scriptului recalculat.
 
 ### 12 octombrie 2026 — versiunea 1.0.4
 - 1.0.4 — 2026-10-12: versiunea și data ultimei actualizări sunt afișate în aplicație
@@ -81,3 +103,5 @@ Alexio — Alexandru-Ionuț Chiuță. Contact: alexio@trom.tf
 ## English summary
 
 Field Observer is a single-file, Romanian-language mobile field tool: live GPS, compass, motion, ambient light, audio level, camera with QR/barcode detection, torch and NFC, plus saved field reports (IndexedDB database `ASFAN_FO`) with notes, photo and audio, JSON export and sharing. No network requests (CSP connect-src 'self'). CC0 1.0.
+
+New in 1.1.0: GPS track recording (foreground only), GPX 1.1 export of reports and tracks, `.fff.json` archive bundle (export/import), QR code per report (geo: position or short text), print view of the archive, and the "Transparency" dialog. The UI remains Romanian-only. The kit adds no network requests.

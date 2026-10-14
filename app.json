@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "slug": "fieldobserver",
+  "name": "ASFAN · Field Observer v1.1.0",
+  "version": "1.1.0",
+  "updated": "2026-10-14",
+  "description": "",
+  "egress": [],
+  "permissions": [
+    "getUserMedia",
+    "geolocation",
+    "navigator.share",
+    "speechSynthesis",
+    "SpeechRecognition",
+    "clipboard",
+    "serviceWorker",
+    "indexedDB"
+  ],
+  "storageKeys": [],
+  "sizeBytes": 209516,
+  "sha256": "626005444f2883dea6ba215ad116a95cb03af1da7dfb23628ffdca46d637fed3",
+  "csp": {
+    "present": true,
+    "directives": {
+      "default-src": "'self'",
+      "img-src": "'self' data: blob:",
+      "style-src": "'self' 'unsafe-inline'",
+      "font-src": "'self' data:",
+      "media-src": "'self' blob: data:",
+      "object-src": "'none'",
+      "base-uri": "'self'",
+      "form-action": "'self'",
+      "worker-src": "'self' blob:",
+      "script-src": "'self' blob: sha256×3",
+      "connect-src": "'self'",
+      "manifest-src": "'self'"
+    },
+    "scriptInline": "hash",
+    "connect": "'self'"
+  },
+  "features": {
+    "export": true,
+    "import": true,
+    "i18n": [],
+    "pwa": {
+      "manifest": true,
+      "serviceWorker": true
+    },
+    "modules": [
+      "core",
+      "label",
+      "bundle",
+      "qr"
+    ]
+  },
+  "kit": {
+    "version": "1.0.0",
+    "modules": [
+      "core",
+      "label",
+      "bundle",
+      "qr"
+    ]
+  },
+  "selfSerializing": false
+}
