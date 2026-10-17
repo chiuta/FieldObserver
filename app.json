@@ -17,8 +17,8 @@
     "indexedDB"
   ],
   "storageKeys": [],
-  "sizeBytes": 209770,
-  "sha256": "49dcfe779af238ab1eebd8aa9e31801bfc7a70933cb5f6820851894731d35a28",
+  "sizeBytes": 209749,
+  "sha256": "b9418f46daeb14faa72497f3d5b2a0eee31b750503234d12b1db64579b5654d5",
   "csp": {
     "present": true,
     "directives": {
