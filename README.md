@@ -57,7 +57,7 @@ Module lipite în `index.html`: `core`, `label`, `bundle`, `qr` (generator de co
 ## Confidențialitate și rețea
 
 - **Stocare locală:** IndexedDB, baza `ASFAN_FO` (versiunea 3), magaziile `recs` (rapoartele, inclusiv foto și audio) și `tracks` (traseele GPS, de la 1.1.0; baza veche se actualizează automat, rapoartele rămân). Nu se folosește `localStorage`.
-- **Rețea:** aplicația nu conține apeluri `fetch` și are o politică CSP cu `connect-src 'self'`; nu contactează hosturi terțe. Linkurile „Patreon" și „Coffee" se deschid doar la clic.
+- **Rețea:** aplicația nu conține apeluri `fetch` și are o politică CSP cu `connect-src 'self'`; nu contactează hosturi terțe. Linkul „Coffee" se deschide doar la clic.
 - Notă: dictarea vocală folosește funcția de recunoaștere vocală a browserului, care în unele browsere (de ex. Chrome) poate trimite audio către serviciul furnizorului browserului; aplicația nu controlează acest aspect.
 - **Date sensibile:** rapoartele conțin locație GPS, fotografii, înregistrări audio și note, stocate necriptat în IndexedDB pe dispozitiv; butonul „SHARE" și descărcarea JSON le pot scoate din aplicație. Ștergerea datelor site-ului șterge arhiva; exportați JSON pentru backup. Pe un telefon partajat sau pierdut, rapoartele pot fi citite de oricine are acces la profilul browserului.
 - Fără analitice.
@@ -84,7 +84,7 @@ Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m
 ### 11 octombrie 2026
 - Versiune 1.0.1 (în titlu, ecranul de start și comentariul din cod).
 - Accesibilitate: antet (`<header>` cu `<h1>`), `<main>` și widgetul de sprijin ca reper; axe-core raportează 0 încălcări la 1280 și 360 px.
-- Pastila Patreon/Coffee nu mai acoperă bara de butoane (AUDIO, TORȚĂ, NFC, ARHIVĂ): stă la dreapta, la mijlocul vizorului, iar pe ecran îngust pornește restrânsă.
+- Pastila Buy Me a Coffee nu mai acoperă bara de butoane (AUDIO, TORȚĂ, NFC, ARHIVĂ): stă la dreapta, la mijlocul vizorului, iar pe ecran îngust pornește restrânsă.
 - Butonul „ACTIVARE COMPLETĂ” rămânea pe „⏳...” după activare: acum arată „✓ ACTIV”.
 - Securitate: cele 15 handler-e `onclick` inline au fost înlocuite cu un handler delegat; CSP folosește hash SHA-256 pentru script, fără `'unsafe-inline'` în `script-src`.
 
