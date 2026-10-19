@@ -1,6 +1,6 @@
 # Field Observer
 
-**Versiune:** 1.1.0 · **Ultima actualizare:** 14 octombrie 2026
+**Versiune:** 1.2.0 · **Ultima actualizare:** 19 octombrie 2026
 
 Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră, NFC și rapoarte salvate local.
 
@@ -10,7 +10,7 @@ Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră,
 
 ## Ce este
 
-ASFAN Field Observer (v1.1.0) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
+ASFAN Field Observer (v1.2.0) este o aplicație single-file, gândită pentru telefon, care afișează în timp real datele senzorilor dispozitivului și permite salvarea de „rapoarte" de teren (date de senzori, notă, fotografie, înregistrare audio). Interfața este în română.
 
 ## Funcții
 
@@ -67,6 +67,9 @@ Module lipite în `index.html`: `core`, `label`, `bundle`, `qr` (generator de co
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
 ## Istoric / Changelog
+
+### 18 octombrie 2026 — versiunea 1.2.0
+- Nou: „↗ Bolta” (cerul la poziția GPS: live în bara GPS; în arhivă, pentru rapoartele noi, la locul și momentul raportului). Rapoartele noi păstrează momentul UTC (`t`), folosit și în GPX. Poziția din link e rotunjită la ~1 km.
 
 ### 14 octombrie 2026 — versiunea 1.1.0
 - Nou: traseu GPS, export GPX 1.1, pachet `.fff.json` (export/import), cod QR pe raport (poziție sau text), tipărirea arhivei, fereastra „Transparență” (fff-kit: core, label, bundle, qr). Baza IndexedDB trece la versiunea 3 (magazie nouă `tracks`). Testele noi: `tests/fff-r8.test.mjs`. CSP: hash-ul scriptului recalculat.
