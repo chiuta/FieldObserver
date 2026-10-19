@@ -7,7 +7,7 @@ const AXE = process.env.FFF_AXE || '/tmp/claude-0/-home-claude/78529928-3825-51c
 let ok = 0, bad = 0; const t = (n, c, x) => { if (c) { ok++; console.log('  ok  ', n); } else { bad++; console.log('  FAIL', n, x ?? ''); } };
 const b = await chromium.launch({executablePath: '/opt/pw-browsers/chromium', args: ['--no-sandbox']});
 async function mk(w = 1280, h = 800, extra = {}) {
-  const ctx = await b.newContext({viewport: {width: w, height: h}, acceptDownloads: true, permissions: ['geolocation'], geolocation: {latitude: 45.38, longitude: 26.4, accuracy: 10}, ...extra});
+  const ctx = await b.newContext({viewport: {width: w, height: h}, acceptDownloads: true, locale: 'ro-RO', permissions: ['geolocation'], geolocation: {latitude: 45.38, longitude: 26.4, accuracy: 10}, ...extra});
   const net = []; await ctx.route(/^https?:/, r => { net.push(r.request().url()); r.abort(); });
   const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' || /Content Security Policy/.test(m.text())) errs.push(m.text()); });
   return {ctx, p, errs, net};
@@ -36,7 +36,7 @@ t('GPX: nota cu caractere speciale rămâne exactă', await p.evaluate(x => { co
 t('GPX: timp ISO și coordonate valide', /<time>\d{4}-\d\d-\d\dT[\d:.]+Z<\/time>/.test(xml) && /<trkpt lat="45\.38[0-9]+" lon="26\.40[0-9]+"/.test(xml));
 const f = await dl(p, '[data-act=expFff]');
 const bun = JSON.parse(f.txt);
-t('.fff.json: format/app/schema/versiune', bun.format === 'fff-bundle' && bun.schema === 1 && bun.app === 'fieldobserver' && bun.version === '1.2.0', JSON.stringify(bun).slice(0, 120));
+t('.fff.json: format/app/schema/versiune', bun.format === 'fff-bundle' && bun.schema === 1 && bun.app === 'fieldobserver' && bun.version === '1.3.0', JSON.stringify(bun).slice(0, 120));
 const inner = JSON.parse(bun.data['fieldobserver.arhiva']);
 t('.fff.json: 1 raport + 1 traseu', inner.records.length === 1 && inner.tracks.length === 1 && inner.tracks[0].pts.length >= 4);
 await p.click('[data-act=qrRec]'); await p.waitForTimeout(400);

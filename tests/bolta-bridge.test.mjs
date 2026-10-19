@@ -1,9 +1,9 @@
-// FieldObserver 1.2.0 — „↗ Bolta”. Copiat în FieldObserver/tests/bolta-bridge.test.mjs. Rulare: node bolta-bridge.test.mjs <dirFO> <dirBolta>
+// FieldObserver 1.3.0 — „↗ Bolta”. Copiat în FieldObserver/tests/bolta-bridge.test.mjs. Rulare: node bolta-bridge.test.mjs <dirFO> <dirBolta>
 import {createRequire} from "module"; const require = createRequire("/opt/node-tools/package.json"); const {chromium} = require("playwright");
 let fails = 0, passes = 0; const check = (n, c, x) => { c ? (passes++, console.log("  ok  " + n)) : (fails++, console.log("FAIL  " + n + (x !== undefined ? "  -> " + JSON.stringify(x) : ""))); };
 const [dF, dB] = process.argv.slice(2);
 const b = await chromium.launch({executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"]});
-const ctx = await b.newContext({viewport: {width: 420, height: 800}, permissions: ["geolocation"], geolocation: {latitude: 45.3812, longitude: 26.4047, accuracy: 10}, timezoneId: "Europe/Bucharest"});
+const ctx = await b.newContext({viewport: {width: 420, height: 800}, locale: "ro-RO", permissions: ["geolocation"], geolocation: {latitude: 45.3812, longitude: 26.4047, accuracy: 10}, timezoneId: "Europe/Bucharest"});
 const net = []; await ctx.route(/^https?:/, r => { net.push(r.request().url()); r.abort(); });
 const p = await ctx.newPage(); const errs = []; p.on("pageerror", e => errs.push(e.message)); p.on("console", m => { if (m.type() === "error" || /Content Security Policy/.test(m.text())) errs.push(m.text()); });
 await p.clock.install({time: new Date("2026-10-18T12:00:00Z")});
@@ -33,7 +33,7 @@ const cl = await p.evaluate(() => [cleanRec({ts: "x", t: 1760788800000, gps: {}}
 check("import: t valid păstrat, invalid -> null", cl[0] === 1760788800000 && cl[1] === null && cl[2] === null, cl);
 check("0 erori / 0 rețea", errs.length === 0 && net.length === 0, [errs, net]);
 // ținta: Bolta acceptă exact acest format
-const q = await (await b.newContext({viewport: {width: 1000, height: 800}})).newPage(); const qe = []; q.on("pageerror", e => qe.push(e.message));
+const q = await (await b.newContext({viewport: {width: 1000, height: 800}, locale: "ro-RO"})).newPage(); const qe = []; q.on("pageerror", e => qe.push(e.message));
 await q.goto("file://" + dB + "/index.html#sky&t=2026-10-18T12:00:00Z&ll=45.38,26.40&from=fieldobserver"); await q.waitForTimeout(2500);
 check("Bolta: butonul „înapoi” spre Field Observer", await q.evaluate(() => !!document.getElementById("fff-back")));
 await b.close(); console.log(`\n${passes} reușite, ${fails} eșuate`); process.exit(fails ? 1 : 0);
