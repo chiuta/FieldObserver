@@ -10,7 +10,7 @@ Terepi megfigyelő a telefonon: GPS, iránytű, mozgás, fény, hang, kamera, NF
 
 **Online alkalmazás:** https://chiuta.github.io/FieldObserver/
 
-![Képernyőkép](screenshot.png)
+![Képernyőkép](screenshot.hu.png)
 
 ## Mi ez
 

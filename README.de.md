@@ -10,7 +10,7 @@ Feldbeobachter auf dem Smartphone: GPS, Kompass, Bewegung, Licht, Ton, Kamera, N
 
 **Online-App:** https://chiuta.github.io/FieldObserver/
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.de.png)
 
 ## Was es ist
 

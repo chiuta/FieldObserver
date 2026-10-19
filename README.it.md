@@ -10,7 +10,7 @@ Osservatore da campo sul telefono: GPS, bussola, movimento, luce, suono, fotocam
 
 **App online:** https://chiuta.github.io/FieldObserver/
 
-![Schermata](screenshot.png)
+![Schermata](screenshot.it.png)
 
 ## Cos'è
 

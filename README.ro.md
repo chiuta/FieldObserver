@@ -10,7 +10,7 @@ Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră,
 
 **Live:** https://chiuta.github.io/FieldObserver/
 
-![Captura de ecran](screenshot.png)
+![Captura de ecran](screenshot.ro.png)
 
 ## Ce este
 

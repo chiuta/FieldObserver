@@ -10,7 +10,7 @@ Observateur de terrain sur téléphone : GPS, boussole, mouvement, lumière, son
 
 **Application en ligne :** https://chiuta.github.io/FieldObserver/
 
-![Capture d'écran](screenshot.png)
+![Capture d'écran](screenshot.fr.png)
 
 ## De quoi s'agit-il
 

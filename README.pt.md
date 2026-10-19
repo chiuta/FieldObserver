@@ -10,7 +10,7 @@ Observador de campo no telemóvel: GPS, bússola, movimento, luz, som, câmara, 
 
 **Aplicação online:** https://chiuta.github.io/FieldObserver/
 
-![Captura de ecrã](screenshot.png)
+![Captura de ecrã](screenshot.pt.png)
 
 ## O que é
 

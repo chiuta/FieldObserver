@@ -10,7 +10,7 @@ Observador de campo en el teléfono: GPS, brújula, movimiento, luz, sonido, cá
 
 **Aplicación en línea:** https://chiuta.github.io/FieldObserver/
 
-![Captura de pantalla](screenshot.png)
+![Captura de pantalla](screenshot.es.png)
 
 ## Qué es
 

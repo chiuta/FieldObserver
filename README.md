@@ -10,7 +10,7 @@ Field observer on your phone: GPS, compass, motion, light, sound, camera, NFC an
 
 **Live app:** https://chiuta.github.io/FieldObserver/
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.en.png)
 
 ## What it is
 
