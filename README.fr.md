@@ -107,8 +107,9 @@ MIT — voir le fichier LICENSE
 
 Alexio — Alexandru-Ionuț Chiuță. Contact : alexio@trom.tf
 
-## English summary
+## Résumé
 
-Field Observer is a single-file, Romanian-language mobile field tool: live GPS, compass, motion, ambient light, audio level, camera with QR/barcode detection, torch and NFC, plus saved field reports (IndexedDB database `ASFAN_FO`) with notes, photo and audio, JSON export and sharing. No network requests (CSP connect-src 'self'). MIT licence.
+Field Observer est un outil de terrain mobile en roumain, en un seul fichier : GPS en direct, boussole, mouvement, lumière ambiante, niveau sonore, caméra avec détection de QR/codes-barres, lampe torche et NFC, ainsi que des rapports de terrain enregistrés (base IndexedDB `ASFAN_FO`) avec notes, photo et audio, export JSON et partage. Aucune requête réseau (CSP connect-src 'self'). Licence MIT.
 
-New in 1.1.0: GPS track recording (foreground only), GPX 1.1 export of reports and tracks, `.fff.json` archive bundle (export/import), QR code per report (geo: position or short text), print view of the archive, and the "Transparency" dialog. The UI remains Romanian-only. The kit adds no network requests.
+Nouveau dans la 1.1.0 : enregistrement de traces GPS (au premier plan uniquement), export GPX 1.1 des rapports et des traces, archive groupée `.fff.json` (export/import), code QR par rapport (position geo: ou texte court), vue d'impression de l'archive et boîte de dialogue « Transparence ». L'interface reste uniquement en roumain. Le kit n'ajoute aucune requête réseau.
+
