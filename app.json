@@ -17,8 +17,8 @@
     "indexedDB"
   ],
   "storageKeys": [],
-  "sizeBytes": 209917,
-  "sha256": "cbfd242529205163731bb9c70a8c51e0c5cd5e8208ea2436cc5f96f17ced6314",
+  "sizeBytes": 210553,
+  "sha256": "40b3e650756d1c4c5c0471fa699fd608ddc3864e4c21dbe2c58e6d69cab5a798",
   "csp": {
     "present": true,
     "directives": {
@@ -54,7 +54,7 @@
     ]
   },
   "kit": {
-    "version": "1.1.0",
+    "version": "1.1.1",
     "modules": [
       "core",
       "label",
