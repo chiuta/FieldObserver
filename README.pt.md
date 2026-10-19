@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · **Português** · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versão:** 1.2.0 · **Última atualização:** 2026-10-19
+**Versão:** 1.3.0 · **Última atualização:** 2026-10-19
+
+Idiomas da interface: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Observador de campo no telemóvel: GPS, bússola, movimento, luz, som, câmara, NFC e relatórios guardados localmente.
 
@@ -12,7 +14,7 @@ Observador de campo no telemóvel: GPS, bússola, movimento, luz, som, câmara, 
 
 ## O que é
 
-O ASFAN Field Observer (v1.2.0) é uma aplicação de um único ficheiro, pensada para o telemóvel, que apresenta em tempo real os dados dos sensores do dispositivo e permite guardar «relatórios» de campo (dados dos sensores, nota, fotografia, gravação de áudio). A interface está em romeno.
+O ASFAN Field Observer (v1.2.0) é uma aplicação de um único ficheiro, pensada para o telemóvel, que apresenta em tempo real os dados dos sensores do dispositivo e permite guardar «relatórios» de campo (dados dos sensores, nota, fotografia, gravação de áudio). A interface tem 8 idiomas (RO, EN, FR, IT, ES, PT, DE, HU).
 
 ## Funcionalidades
 
@@ -35,7 +37,7 @@ O ASFAN Field Observer (v1.2.0) é uma aplicação de um único ficheiro, pensad
 - **Impressão** (arquivo → 🖨 TIPĂREȘTE): lista limpa, fundo branco, sem botões e sem fotografias.
 - **Transparência** (arquivo → ℹ TRANSPARENȚĂ): a janela padrão «sem fronteiras» com a rede (0 pedidos externos), o armazenamento, as permissões e a verificação do ficheiro por SHA-256.
 
-A interface continua a estar **apenas em romeno** (a aplicação não tem sistema de línguas); os textos novos também estão em romeno.
+A interface tem 8 idiomas (RO, EN, FR, IT, ES, PT, DE, HU); as traduções que não sejam romeno são automáticas e não verificadas por falantes nativos.
 
 ## Kit «fff-kit»
 

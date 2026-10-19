@@ -2,7 +2,9 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.2.0 · **Last updated:** 2026-10-19
+**Version:** 1.3.0 · **Last updated:** 2026-10-19
+
+Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Field observer on your phone: GPS, compass, motion, light, sound, camera, NFC and locally saved reports.
 
@@ -12,7 +14,7 @@ Field observer on your phone: GPS, compass, motion, light, sound, camera, NFC an
 
 ## What it is
 
-ASFAN Field Observer (v1.2.0) is a single-file application designed for phones, which displays the device's sensor data in real time and allows saving field "reports" (sensor data, note, photo, audio recording). The interface is in Romanian.
+ASFAN Field Observer (v1.2.0) is a single-file application designed for phones, which displays the device's sensor data in real time and allows saving field "reports" (sensor data, note, photo, audio recording). The interface has 8 languages (RO, EN, FR, IT, ES, PT, DE, HU).
 
 ## Features
 
@@ -35,7 +37,7 @@ ASFAN Field Observer (v1.2.0) is a single-file application designed for phones, 
 - **Printing** (archive → 🖨 TIPĂREȘTE): a clean list, white background, without buttons and without photos.
 - **Transparency** (archive → ℹ TRANSPARENȚĂ): the standard "trade-free" window with the network (0 external requests), storage, permissions and file verification via SHA-256.
 
-The interface remains **Romanian only** (the app has no language system); the new texts are also in Romanian.
+The interface has 8 languages (RO, EN, FR, IT, ES, PT, DE, HU); the translations other than Romanian are automatic and not verified by native speakers.
 
 ## "fff-kit" kit
 

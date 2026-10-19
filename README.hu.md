@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.2.0 · **Utolsó frissítés:** 2026-10-19
+**Verzió:** 1.3.0 · **Utolsó frissítés:** 2026-10-19
+
+A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Terepi megfigyelő a telefonon: GPS, iránytű, mozgás, fény, hang, kamera, NFC és helyben mentett jelentések.
 
@@ -12,7 +14,7 @@ Terepi megfigyelő a telefonon: GPS, iránytű, mozgás, fény, hang, kamera, NF
 
 ## Mi ez
 
-Az ASFAN Field Observer (v1.2.0) egyetlen fájlból álló, telefonra tervezett alkalmazás, amely valós időben megjeleníti az eszköz szenzoradatait, és lehetővé teszi terepi „jelentések” mentését (szenzoradatok, jegyzet, fénykép, hangfelvétel). A felület román nyelvű.
+Az ASFAN Field Observer (v1.2.0) egyetlen fájlból álló, telefonra tervezett alkalmazás, amely valós időben megjeleníti az eszköz szenzoradatait, és lehetővé teszi terepi „jelentések” mentését (szenzoradatok, jegyzet, fénykép, hangfelvétel). A felület 8 nyelvű (RO, EN, FR, IT, ES, PT, DE, HU).
 
 ## Funkciók
 
@@ -35,7 +37,7 @@ Az ASFAN Field Observer (v1.2.0) egyetlen fájlból álló, telefonra tervezett 
 - **Nyomtatás** (archívum → 🖨 TIPĂREȘTE): tiszta lista, fehér háttér, gombok és fényképek nélkül.
 - **Átláthatóság** (archívum → ℹ TRANSPARENȚĂ): a szabványos „határok nélküli” ablak a hálózattal (0 külső kérés), a tárolással, az engedélyekkel és a fájl SHA-256 szerinti ellenőrzésével.
 
-A felület továbbra is **kizárólag román nyelvű** (az alkalmazásnak nincs nyelvi rendszere); az új szövegek is románul vannak.
+A felület 8 nyelvű (RO, EN, FR, IT, ES, PT, DE, HU); a romántól eltérő fordítások gépiek, és anyanyelvi beszélők nem ellenőrizték őket.
 
 ## „fff-kit” kit
 

@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.2.0 · **Dernière mise à jour :** 2026-10-19
+**Version :** 1.3.0 · **Dernière mise à jour :** 2026-10-19
+
+Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Observateur de terrain sur téléphone : GPS, boussole, mouvement, lumière, son, caméra, NFC et rapports enregistrés localement.
 
@@ -12,7 +14,7 @@ Observateur de terrain sur téléphone : GPS, boussole, mouvement, lumière, son
 
 ## De quoi s'agit-il
 
-ASFAN Field Observer (v1.2.0) est une application en un seul fichier, conçue pour le téléphone, qui affiche en temps réel les données des capteurs de l'appareil et permet d'enregistrer des « rapports » de terrain (données des capteurs, note, photo, enregistrement audio). L'interface est en roumain.
+ASFAN Field Observer (v1.2.0) est une application en un seul fichier, conçue pour le téléphone, qui affiche en temps réel les données des capteurs de l'appareil et permet d'enregistrer des « rapports » de terrain (données des capteurs, note, photo, enregistrement audio). L'interface compte 8 langues (RO, EN, FR, IT, ES, PT, DE, HU).
 
 ## Fonctionnalités
 
@@ -35,7 +37,7 @@ ASFAN Field Observer (v1.2.0) est une application en un seul fichier, conçue po
 - **Impression** (archive → 🖨 TIPĂREȘTE) : liste épurée, fond blanc, sans boutons et sans photos.
 - **Transparence** (archive → ℹ TRANSPARENȚĂ) : la fenêtre standard « sans frontières » avec le réseau (0 requête externe), le stockage, les autorisations et la vérification du fichier par SHA-256.
 
-L'interface reste **uniquement en roumain** (l'application n'a pas de système de langues) ; les nouveaux textes sont eux aussi en roumain.
+L'interface compte 8 langues (RO, EN, FR, IT, ES, PT, DE, HU) ; les traductions autres que le roumain sont automatiques et non vérifiées par des locuteurs natifs.
 
 ## Kit « fff-kit »
 
