@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.3.1 · **Last updated:** 2026-10-22
+**Version:** 1.3.2 · **Last updated:** 2026-10-22
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,10 @@ Modules embedded in `index.html`: `core`, `label`, `bundle`, `qr` (QR code gener
 Download `index.html` and open it via `localhost` (e.g. `python3 -m http.server 8080`) or from an HTTPS host; the sensors and camera require a secure context. No internet required. Sensor availability depends on the device and the browser.
 
 ## History / Changelog
+
+### 1.3.2 — 2026-10-22
+
+fff-kit 1.1.2: PBKDF2 with 600,000 iterations, anti-clickjacking protection.
 
 ### 1.3.1 — 2026-10-22
 - GPS is no longer requested when the app opens: the location permission prompt appears on first interaction (or immediately if it was already granted).
