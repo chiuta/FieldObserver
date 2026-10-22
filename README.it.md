@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.3.0 · **Ultimo aggiornamento:** 2026-10-19
+**Versione:** 1.3.1 · **Ultimo aggiornamento:** 2026-10-22
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,12 @@ Moduli incorporati in `index.html`: `core`, `label`, `bundle`, `qr` (generatore 
 Scarica `index.html` e aprilo tramite `localhost` (ad es. `python3 -m http.server 8080`) o da un host HTTPS; i sensori e la fotocamera richiedono un contesto sicuro. Non serve Internet. La disponibilità dei sensori dipende dal dispositivo e dal browser.
 
 ## Cronologia / Changelog
+
+### 1.3.1 — 2026-10-22
+- Il GPS non viene più richiesto all'apertura: la richiesta di permesso appare alla prima interazione (o subito se già concesso).
+- La conferma di eliminazione di una registrazione è una finestra modale tradotta invece del confirm() del browser.
+- Accessibilità: il campo note e il campo di importazione dell'archivio hanno nomi annunciati dagli screen reader.
+- Mobile: il testo è di almeno 12 px e pulsanti e campi hanno aree tattili più grandi sugli schermi stretti.
 
 ### 18 ottobre 2026 — versione 1.2.0
 - Novità: «↗ Bolta» (il cielo alla posizione GPS: in diretta nella barra GPS; nell'archivio, per i nuovi rapporti, nel luogo e nel momento del rapporto). I nuovi rapporti conservano l'istante UTC (`t`), usato anche nel GPX. La posizione nel link è arrotondata a ~1 km.

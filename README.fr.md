@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.3.0 · **Dernière mise à jour :** 2026-10-19
+**Version :** 1.3.1 · **Dernière mise à jour :** 2026-10-22
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,12 @@ Modules intégrés dans `index.html` : `core`, `label`, `bundle`, `qr` (généra
 Téléchargez `index.html` et ouvrez-le via `localhost` (p. ex. `python3 -m http.server 8080`) ou depuis un hôte HTTPS ; les capteurs et la caméra exigent un contexte sécurisé. Aucun accès à Internet n'est nécessaire. La disponibilité des capteurs dépend de l'appareil et du navigateur.
 
 ## Historique / Changelog
+
+### 1.3.1 — 2026-10-22
+- Le GPS n'est plus demandé à l'ouverture : la demande d'autorisation apparaît à la première interaction (ou tout de suite si elle était déjà accordée).
+- La confirmation de suppression d'un enregistrement est une boîte de dialogue modale traduite au lieu du confirm() du navigateur.
+- Accessibilité : le champ de notes et le champ d'import d'archive ont des noms annoncés par les lecteurs d'écran.
+- Mobile : le texte fait au moins 12 px et les boutons et champs ont des cibles tactiles plus grandes sur les écrans étroits.
 
 ### 18 octobre 2026 — version 1.2.0
 - Nouveau : « ↗ Bolta » (le ciel à la position GPS : en direct dans la barre GPS ; dans l'archive, pour les nouveaux rapports, au lieu et au moment du rapport). Les nouveaux rapports conservent l'instant UTC (`t`), également utilisé dans le GPX. La position dans le lien est arrondie à ~1 km.

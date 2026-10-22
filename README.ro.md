@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.3.0 · **Ultima actualizare:** 2026-10-19
+**Versiune:** 1.3.1 · **Ultima actualizare:** 2026-10-22
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,12 @@ Module lipite în `index.html`: `core`, `label`, `bundle`, `qr` (generator de co
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
 ## Istoric / Changelog
+
+### 1.3.1 — 2026-10-22
+- GPS-ul nu mai este cerut la deschiderea aplicației: cererea de permisiune apare la prima interacțiune (sau imediat dacă era deja acordată).
+- Confirmarea ștergerii unei înregistrări este un dialog modal tradus, nu confirm() al browserului.
+- Accesibilitate: câmpul de notițe și câmpul de import al arhivei au nume anunțate de cititoarele de ecran.
+- Mobil: textul are cel puțin 12 px, iar butoanele și câmpurile au ținte tactile mai mari pe ecrane înguste.
 
 ### 18 octombrie 2026 — versiunea 1.2.0
 - Nou: „↗ Bolta” (cerul la poziția GPS: live în bara GPS; în arhivă, pentru rapoartele noi, la locul și momentul raportului). Rapoartele noi păstrează momentul UTC (`t`), folosit și în GPX. Poziția din link e rotunjită la ~1 km.

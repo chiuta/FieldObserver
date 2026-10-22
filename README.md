@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.3.0 · **Last updated:** 2026-10-19
+**Version:** 1.3.1 · **Last updated:** 2026-10-22
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,12 @@ Modules embedded in `index.html`: `core`, `label`, `bundle`, `qr` (QR code gener
 Download `index.html` and open it via `localhost` (e.g. `python3 -m http.server 8080`) or from an HTTPS host; the sensors and camera require a secure context. No internet required. Sensor availability depends on the device and the browser.
 
 ## History / Changelog
+
+### 1.3.1 — 2026-10-22
+- GPS is no longer requested when the app opens: the location permission prompt appears on first interaction (or immediately if it was already granted).
+- The record-delete confirmation is a translated modal dialog instead of the browser confirm().
+- Accessibility: the notes field and the archive import field now have names announced by screen readers.
+- Mobile: text is at least 12 px and buttons and fields have larger touch targets on narrow screens.
 
 ### 18 October 2026 — version 1.2.0
 - New: "↗ Bolta" (the sky at the GPS position: live in the GPS bar; in the archive, for new reports, at the place and moment of the report). New reports keep the UTC moment (`t`), also used in GPX. The position in the link is rounded to ~1 km.

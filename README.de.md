@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.3.0 · **Zuletzt aktualisiert:** 2026-10-19
+**Version:** 1.3.1 · **Zuletzt aktualisiert:** 2026-10-22
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,12 @@ In `index.html` eingebettete Module: `core`, `label`, `bundle`, `qr` (QR-Code-Ge
 Lade `index.html` herunter und öffne sie über `localhost` (z. B. `python3 -m http.server 8080`) oder von einem HTTPS-Host; Sensoren und Kamera erfordern einen sicheren Kontext. Kein Internet erforderlich. Die Verfügbarkeit der Sensoren hängt vom Gerät und vom Browser ab.
 
 ## Verlauf / Changelog
+
+### 1.3.1 — 2026-10-22
+- GPS wird beim Öffnen der App nicht mehr angefordert: die Berechtigungsabfrage erscheint bei der ersten Interaktion (oder sofort, wenn sie bereits erteilt war).
+- Die Löschbestätigung eines Eintrags ist ein übersetzter modaler Dialog statt des Browser-confirm().
+- Barrierefreiheit: Notizfeld und Archiv-Importfeld haben Namen, die von Screenreadern angesagt werden.
+- Mobil: Der Text ist mindestens 12 px groß, und Schaltflächen und Felder haben auf schmalen Bildschirmen größere Touch-Flächen.
 
 ### 18. Oktober 2026 — Version 1.2.0
 - Neu: „↗ Bolta“ (der Himmel an der GPS-Position: live in der GPS-Leiste; im Archiv, für neue Berichte, am Ort und zum Zeitpunkt des Berichts). Neue Berichte behalten den UTC-Zeitpunkt (`t`), der auch im GPX verwendet wird. Die Position im Link wird auf ~1 km gerundet.

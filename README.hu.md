@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.0 · **Utolsó frissítés:** 2026-10-19
+**Verzió:** 1.3.1 · **Utolsó frissítés:** 2026-10-22
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,12 @@ Az `index.html` fájlba beágyazott modulok: `core`, `label`, `bundle`, `qr` (QR
 Töltsd le az `index.html` fájlt, és nyisd meg `localhost`-on keresztül (pl. `python3 -m http.server 8080`) vagy HTTPS-gazdagépről; a szenzorokhoz és a kamerához biztonságos környezet kell. Internet nem szükséges. A szenzorok elérhetősége az eszköztől és a böngészőtől függ.
 
 ## Előzmények / Changelog
+
+### 1.3.1 — 2026-10-22
+- A GPS-t az alkalmazás megnyitásakor már nem kéri el: az engedélykérés az első interakciónál jelenik meg (vagy azonnal, ha már meg volt adva).
+- A rekord törlésének megerősítése lefordított modális párbeszédablak a böngésző confirm() helyett.
+- Kisegítő lehetőségek: a jegyzetmező és az archívum-importmező neve felolvasható a képernyőolvasókkal.
+- Mobil: a szöveg legalább 12 px, a gombok és mezők érintési felülete pedig nagyobb keskeny képernyőn.
 
 ### 2026. október 18. — 1.2.0 verzió
 - Új: „↗ Bolta” (az ég a GPS-pozíciónál: élőben a GPS-sávban; az archívumban az új jelentéseknél a jelentés helyén és időpontjában). Az új jelentések megőrzik az UTC időpontot (`t`), amelyet a GPX is használ. A hivatkozásban szereplő pozíció ~1 km-re van kerekítve.

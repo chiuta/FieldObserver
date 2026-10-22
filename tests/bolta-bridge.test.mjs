@@ -1,4 +1,4 @@
-// FieldObserver 1.3.0 — „↗ Bolta”. Copiat în FieldObserver/tests/bolta-bridge.test.mjs. Rulare: node bolta-bridge.test.mjs <dirFO> <dirBolta>
+// FieldObserver 1.3.1 — „↗ Bolta”. Copiat în FieldObserver/tests/bolta-bridge.test.mjs. Rulare: node bolta-bridge.test.mjs <dirFO> <dirBolta>
 import {createRequire} from "module"; const require = createRequire("/opt/node-tools/package.json"); const {chromium} = require("playwright");
 let fails = 0, passes = 0; const check = (n, c, x) => { c ? (passes++, console.log("  ok  " + n)) : (fails++, console.log("FAIL  " + n + (x !== undefined ? "  -> " + JSON.stringify(x) : ""))); };
 const [dF, dB] = process.argv.slice(2);
