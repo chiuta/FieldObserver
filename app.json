@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "slug": "fieldobserver",
-  "name": "ASFAN · Field Observer v1.3.4",
-  "version": "1.3.5",
+  "name": "ASFAN · Field Observer v1.3.6",
+  "version": "1.3.6",
   "updated": "2026-10-23",
   "description": "Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră, NFC și rapoarte salvate local.",
   "egress": [],
@@ -21,8 +21,8 @@
     "fieldobserver.arhiva",
     "fieldobserver.lang.v1"
   ],
-  "sizeBytes": 339256,
-  "sha256": "44daa79eb0cc10863b1b6128368d5bb73bd8ca25dbbba4230bd2fa47f08cd03f",
+  "sizeBytes": 334992,
+  "sha256": "90d42d723a0d539d52098bc2f9ce76e5e1eae5f6ef2ae6459546fc49c704b1f4",
   "csp": {
     "present": true,
     "directives": {

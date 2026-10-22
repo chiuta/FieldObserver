@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Español** · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versión:** 1.3.5 · **Última actualización:** 2026-10-23
+**Versión:** 1.3.6 · **Última actualización:** 2026-10-23
 
 Idiomas de la interfaz: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,9 @@ Módulos integrados en `index.html`: `core`, `label`, `bundle`, `qr` (generador 
 Descarga `index.html` y ábrelo mediante `localhost` (p. ej., `python3 -m http.server 8080`) o desde un host HTTPS; los sensores y la cámara requieren un contexto seguro. No requiere internet. La disponibilidad de los sensores depende del dispositivo y del navegador.
 
 ## Historial / Changelog
+
+### 1.3.6 — 2026-10-23
+- Los cuadros nativos alert/confirm/prompt se sustituyen por diálogos FFF.dialog accesibles y traducidos (fff-kit 1.2.0).
 
 ### 1.3.4 — 2026-10-22
 
