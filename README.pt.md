@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · **Português** · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versão:** 1.3.2 · **Última atualização:** 2026-10-22
+**Versão:** 1.3.3 · **Última atualização:** 2026-10-22
 
 Idiomas da interface: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,9 @@ Módulos integrados em `index.html`: `core`, `label`, `bundle`, `qr` (gerador de
 Descarregue `index.html` e abra-o através de `localhost` (p. ex., `python3 -m http.server 8080`) ou a partir de um anfitrião HTTPS; os sensores e a câmara exigem um contexto seguro. Não requer internet. A disponibilidade dos sensores depende do dispositivo e do navegador.
 
 ## Histórico / Changelog
+
+### 1.3.3 — 2026-10-22
+- Acessibilidade: anel de foco claro na barra de notas (contraste de pelo menos 3:1).
 
 ### 1.3.2 — 2026-10-22
 
