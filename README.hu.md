@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.3 · **Utolsó frissítés:** 2026-10-22
+**Verzió:** 1.3.4 · **Utolsó frissítés:** 2026-10-22
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,10 @@ Az `index.html` fájlba beágyazott modulok: `core`, `label`, `bundle`, `qr` (QR
 Töltsd le az `index.html` fájlt, és nyisd meg `localhost`-on keresztül (pl. `python3 -m http.server 8080`) vagy HTTPS-gazdagépről; a szenzorokhoz és a kamerához biztonságos környezet kell. Internet nem szükséges. A szenzorok elérhetősége az eszköztől és a böngészőtől függ.
 
 ## Előzmények / Changelog
+
+### 1.3.4 — 2026-10-22
+
+fff-kit 1.1.4: érintési célok és minimális szövegméret. Érintési célok/szöveg javítva az alkalmazásban.
 
 ### 1.3.3 — 2026-10-22
 - Akadálymentesség: jól látható fókuszkeret a jegyzetsávon (legalább 3:1 kontraszt).

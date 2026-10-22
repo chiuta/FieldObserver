@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.3.3 · **Ultima actualizare:** 2026-10-22
+**Versiune:** 1.3.4 · **Ultima actualizare:** 2026-10-22
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,10 @@ Module lipite în `index.html`: `core`, `label`, `bundle`, `qr` (generator de co
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
 ## Istoric / Changelog
+
+### 1.3.4 — 2026-10-22
+
+fff-kit 1.1.4: ținte tactile și text minim. Ținte tactile/text corectate în aplicație.
 
 ### 1.3.3 — 2026-10-22
 - Accesibilitate: inel de focalizare clar la bara de notițe (contrast de cel puțin 3:1).

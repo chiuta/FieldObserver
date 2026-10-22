@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.3.3 · **Dernière mise à jour :** 2026-10-22
+**Version :** 1.3.4 · **Dernière mise à jour :** 2026-10-22
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,10 @@ Modules intégrés dans `index.html` : `core`, `label`, `bundle`, `qr` (généra
 Téléchargez `index.html` et ouvrez-le via `localhost` (p. ex. `python3 -m http.server 8080`) ou depuis un hôte HTTPS ; les capteurs et la caméra exigent un contexte sécurisé. Aucun accès à Internet n'est nécessaire. La disponibilité des capteurs dépend de l'appareil et du navigateur.
 
 ## Historique / Changelog
+
+### 1.3.4 — 2026-10-22
+
+fff-kit 1.1.4 : cibles tactiles et taille de texte minimale. Cibles tactiles/texte corrigés dans l’application.
 
 ### 1.3.3 — 2026-10-22
 - Accessibilité : anneau de focus net sur la barre de notes (contraste d’au moins 3:1).
