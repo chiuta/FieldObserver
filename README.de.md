@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.3.6 · **Zuletzt aktualisiert:** 2026-10-23
+**Version:** 1.3.7 · **Zuletzt aktualisiert:** 2026-10-23
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,10 @@ In `index.html` eingebettete Module: `core`, `label`, `bundle`, `qr` (QR-Code-Ge
 Lade `index.html` herunter und öffne sie über `localhost` (z. B. `python3 -m http.server 8080`) oder von einem HTTPS-Host; Sensoren und Kamera erfordern einen sicheren Kontext. Kein Internet erforderlich. Die Verfügbarkeit der Sensoren hängt vom Gerät und vom Browser ab.
 
 ## Verlauf / Changelog
+
+### 1.3.7 — 2026-10-23
+
+- Fix: importing a .fff.json bundle whose inner content is `null` no longer throws an uncaught exception (it now reports “no valid records”); CSP hash recalculated.
 
 ### 1.3.6 — 2026-10-23
 - Die nativen Dialoge alert/confirm/prompt wurden durch barrierefreie, übersetzte FFF.dialog-Dialoge ersetzt (fff-kit 1.2.0).

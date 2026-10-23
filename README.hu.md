@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.3.6 · **Utolsó frissítés:** 2026-10-23
+**Verzió:** 1.3.7 · **Utolsó frissítés:** 2026-10-23
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,10 @@ Az `index.html` fájlba beágyazott modulok: `core`, `label`, `bundle`, `qr` (QR
 Töltsd le az `index.html` fájlt, és nyisd meg `localhost`-on keresztül (pl. `python3 -m http.server 8080`) vagy HTTPS-gazdagépről; a szenzorokhoz és a kamerához biztonságos környezet kell. Internet nem szükséges. A szenzorok elérhetősége az eszköztől és a böngészőtől függ.
 
 ## Előzmények / Changelog
+
+### 1.3.7 — 2026-10-23
+
+- Fix: importing a .fff.json bundle whose inner content is `null` no longer throws an uncaught exception (it now reports “no valid records”); CSP hash recalculated.
 
 ### 1.3.6 — 2026-10-23
 - A natív alert/confirm/prompt ablakokat akadálymentes, lefordított FFF.dialog párbeszédablakok váltották fel (fff-kit 1.2.0).

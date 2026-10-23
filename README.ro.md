@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.3.6 · **Ultima actualizare:** 2026-10-23
+**Versiune:** 1.3.7 · **Ultima actualizare:** 2026-10-23
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -71,6 +71,10 @@ Module lipite în `index.html`: `core`, `label`, `bundle`, `qr` (generator de co
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
 ## Istoric / Changelog
+
+### 1.3.7 — 2026-10-23
+
+- Corectat: importul unui pachet .fff.json cu conținut intern `null` nu mai aruncă excepție necaptată (acum afișează „fără înregistrări valide”); hash CSP recalculat.
 
 ### 1.3.6 — 2026-10-23
 - Dialogurile native alert/confirm/prompt au fost înlocuite cu dialoguri FFF.dialog accesibile și traduse (fff-kit 1.2.0).
