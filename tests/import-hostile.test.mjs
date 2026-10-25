@@ -1,4 +1,4 @@
-// Teste 1.3.7: importul de arhivă tratează fișierele ostile fără excepții necaptate. Rulare: node tests/import-hostile.test.mjs
+// Teste 1.3.8: importul de arhivă tratează fișierele ostile fără excepții necaptate. Rulare: node tests/import-hostile.test.mjs
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createRequire} from 'node:module';

@@ -36,7 +36,7 @@ t('GPX: nota cu caractere speciale rămâne exactă', await p.evaluate(x => { co
 t('GPX: timp ISO și coordonate valide', /<time>\d{4}-\d\d-\d\dT[\d:.]+Z<\/time>/.test(xml) && /<trkpt lat="45\.38[0-9]+" lon="26\.40[0-9]+"/.test(xml));
 const f = await dl(p, '[data-act=expFff]');
 const bun = JSON.parse(f.txt);
-t('.fff.json: format/app/schema/versiune', bun.format === 'fff-bundle' && bun.schema === 1 && bun.app === 'fieldobserver' && bun.version === '1.3.7', JSON.stringify(bun).slice(0, 120));
+t('.fff.json: format/app/schema/versiune', bun.format === 'fff-bundle' && bun.schema === 1 && bun.app === 'fieldobserver' && bun.version === '1.3.8', JSON.stringify(bun).slice(0, 120));
 const inner = JSON.parse(bun.data['fieldobserver.arhiva']);
 t('.fff.json: 1 raport + 1 traseu', inner.records.length === 1 && inner.tracks.length === 1 && inner.tracks[0].pts.length >= 4);
 await p.click('[data-act=qrRec]'); await p.waitForTimeout(400);
