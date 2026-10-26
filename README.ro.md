@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.3.8 · **Ultima actualizare:** 2026-10-26
+**Versiune:** 2.0.0 · **Ultima actualizare:** 2026-10-26
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -27,6 +27,10 @@ ASFAN Field Observer (v1.2.0) este o aplicație single-file, gândită pentru te
 - Câmp de notă cu dictare vocală (`ro-RO`, dacă browserul oferă recunoaștere vocală), confirmări vocale („Raport salvat") și vibrații.
 - Wake Lock pentru a ține ecranul aprins, acolo unde este disponibil.
 - Arhivă de rapoarte: vizualizare foto, redare audio, partajare (Web Share sau copiere în clipboard), descărcare JSON, ștergere; căutare după notă/dată, export al întregii arhive (JSON cu foto/audio) sau al tabelului (CSV, fără media), import de JSON exportat anterior (câmpuri verificate), coordonate cu N/S și E/V și legătură „hartă” (`geo:`, deschide aplicația de hărți a telefonului), Esc închide panoul.
+
+## Funcții noi (2.0.0)
+
+- **Sesiuni de măsurare** (buton ⏱ SESIE): înregistrează la 1, 2 sau 5 Hz accelerația, rotația, sunetul (dacă microfonul e activ), lumina, direcția și poziția GPS pe o axă de timp comună, împreună cu notele tale scrise în timpul sesiunii. Sesiunile se salvează local (IndexedDB, cu autosalvare a ciornei) și se pot reda cu cursor, viteză 1–8× și salt la o notă; graficele suprapun canalele alese, fiecare normalizat la propriul interval (legenda arată minimul și maximul real). Export JSON, CSV și GPX (traseu + note ca puncte), deschis direct în Poteca. Valorile pe care telefonul nu le oferă rămân goale; limită 36 000 de eșantioane pe sesiune. Sunt grafice orientative, nu măsurători certificate. Declanșatoarele la prag nu sunt incluse.
 
 ## Funcții noi (1.1.0)
 

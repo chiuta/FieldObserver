@@ -90,7 +90,7 @@ await ctx.close();
 { const m = await mk(360, 740); await m.p.goto(FILE); await m.p.waitForTimeout(3600); await m.p.click('#btn-skip'); await m.p.waitForTimeout(400);
   const o = await m.p.evaluate(() => ({sw: document.documentElement.scrollWidth, iw: innerWidth, ab: [...document.querySelectorAll('#ab .ab')].map(e => e.getBoundingClientRect()).map(r => [Math.round(r.left), Math.round(r.right)])}));
   t('360 px: fără depășire orizontală', o.sw <= o.iw + 1, JSON.stringify(o));
-  t('360 px: cele 8 butoane încap în ecran', o.ab.length === 8 && o.ab.every(([l, r]) => l >= 0 && r <= 361), JSON.stringify(o.ab));
+  t('360 px: cele 9 butoane încap în ecran', o.ab.length === 9 && o.ab.every(([l, r]) => l >= 0 && r <= 361), JSON.stringify(o.ab));
   await m.p.click('#b-ar'); await m.p.waitForTimeout(300);
   t('360 px: arhiva fără depășire', await m.p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)); t('360 px: fără erori', m.errs.length === 0, m.errs); await m.ctx.close(); }
 { const m = await mk(); const html = fs.readFileSync(path.join(HERE, '..', 'index.html'), 'utf8').replace(/<!--fff:kit:start[\s\S]*?<!--fff:kit:end-->/, '');
