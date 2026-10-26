@@ -1,8 +1,10 @@
 // FieldObserver 1.3.6 — „↗ Bolta”. Copiat în FieldObserver/tests/bolta-bridge.test.mjs. Rulare: node bolta-bridge.test.mjs <dirFO> <dirBolta>
-import {createRequire} from "module"; const require = createRequire("/opt/node-tools/package.json"); const {chromium} = require("playwright");
+import {createRequire} from "module"; const require = createRequire(process.env.PW_ROOT || import.meta.url); const {chromium} = require("playwright");
+import {existsSync as __ex} from "node:fs"; import __pa from "node:path";
+const __dirs = (args, defs) => { const out = defs.map((d, i) => { const c = args[i] ? [args[i]] : (Array.isArray(d) ? d : [d]); return c.map((x) => __pa.resolve(process.cwd(), x)).find((x) => __ex(__pa.join(x, "index.html"))); }); if (out.some((x) => !x)) { console.log("SKIP: testul cere și aplicațiile învecinate (" + defs.map((d) => [].concat(d)[0]).join(", ") + ") lângă depozit; în CI singur se omite"); process.exit(0); } return out; }; // [fff-ci]
 let fails = 0, passes = 0; const check = (n, c, x) => { c ? (passes++, console.log("  ok  " + n)) : (fails++, console.log("FAIL  " + n + (x !== undefined ? "  -> " + JSON.stringify(x) : ""))); };
-const [dF, dB] = process.argv.slice(2);
-const b = await chromium.launch({executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"]});
+const [dF, dB] = __dirs(process.argv.slice(2), [".", ["../Bolta", "../chiuta.github.io/apps/Bolta"]]);
+const b = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || undefined, args: ["--no-sandbox"]});
 const ctx = await b.newContext({viewport: {width: 420, height: 800}, locale: "ro-RO", permissions: ["geolocation"], geolocation: {latitude: 45.3812, longitude: 26.4047, accuracy: 10}, timezoneId: "Europe/Bucharest"});
 const net = []; await ctx.route(/^https?:/, r => { net.push(r.request().url()); r.abort(); });
 const p = await ctx.newPage(); const errs = []; p.on("pageerror", e => errs.push(e.message)); p.on("console", m => { if (m.type() === "error" || /Content Security Policy/.test(m.text())) errs.push(m.text()); });

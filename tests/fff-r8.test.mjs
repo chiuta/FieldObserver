@@ -1,11 +1,18 @@
 // Teste pentru funcțiile adăugate în v1.1.0 (traseu GPS, GPX, pachet .fff.json, QR, tipărire) + kit.
 // Rulare: node tests/fff-r8.test.mjs   (Playwright din /opt/node-tools, Chromium din /opt/pw-browsers; rețea blocată)
+// [fff-portable] axe-core: FFF_AXE / AXE_PATH, apoi pachetul `axe-core` (npm i -D axe-core). Dacă lipsește: undefined (testele cu axe pică cu mesaj clar).
+import {createRequire as __fffCR} from 'node:module';
+const __fffAxe = () => { try { return __fffCR(import.meta.url).resolve('axe-core/axe.min.js'); } catch { return undefined; } };
+// [fff-portable] versiunea/data/kitul aplicației se citesc din app.json (nu mai sunt hard-codate în teste)
+import {readFileSync as __fffRF} from 'node:fs';
+const __FFF_APP = JSON.parse(__fffRF(new URL('../app.json', import.meta.url), 'utf8'));
+const __fffRe = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 import {createRequire} from 'module'; import fs from 'node:fs'; import path from 'node:path'; import {fileURLToPath} from 'node:url';
-const require = createRequire('/opt/node-tools/package.json'); const {chromium} = require('playwright');
+const require = createRequire(process.env.PW_ROOT || import.meta.url); const {chromium} = require('playwright');
 const HERE = path.dirname(fileURLToPath(import.meta.url)); const FILE = 'file://' + path.join(HERE, '..', 'index.html');
-const AXE = process.env.FFF_AXE || '/tmp/claude-0/-home-claude/78529928-3825-51c3-b9bd-0e81655ab6bc/scratchpad/sweep/node_modules/axe-core/axe.min.js';
+const AXE = process.env.FFF_AXE || __fffAxe();
 let ok = 0, bad = 0; const t = (n, c, x) => { if (c) { ok++; console.log('  ok  ', n); } else { bad++; console.log('  FAIL', n, x ?? ''); } };
-const b = await chromium.launch({executablePath: '/opt/pw-browsers/chromium', args: ['--no-sandbox']});
+const b = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--no-sandbox']});
 async function mk(w = 1280, h = 800, extra = {}) {
   const ctx = await b.newContext({viewport: {width: w, height: h}, acceptDownloads: true, locale: 'ro-RO', permissions: ['geolocation'], geolocation: {latitude: 45.38, longitude: 26.4, accuracy: 10}, ...extra});
   const net = []; await ctx.route(/^https?:/, r => { net.push(r.request().url()); r.abort(); });
@@ -36,7 +43,7 @@ t('GPX: nota cu caractere speciale rămâne exactă', await p.evaluate(x => { co
 t('GPX: timp ISO și coordonate valide', /<time>\d{4}-\d\d-\d\dT[\d:.]+Z<\/time>/.test(xml) && /<trkpt lat="45\.38[0-9]+" lon="26\.40[0-9]+"/.test(xml));
 const f = await dl(p, '[data-act=expFff]');
 const bun = JSON.parse(f.txt);
-t('.fff.json: format/app/schema/versiune', bun.format === 'fff-bundle' && bun.schema === 1 && bun.app === 'fieldobserver' && bun.version === '1.3.8', JSON.stringify(bun).slice(0, 120));
+t('.fff.json: format/app/schema/versiune', bun.format === 'fff-bundle' && bun.schema === 1 && bun.app === 'fieldobserver' && bun.version === __FFF_APP.version, JSON.stringify(bun).slice(0, 120));
 const inner = JSON.parse(bun.data['fieldobserver.arhiva']);
 t('.fff.json: 1 raport + 1 traseu', inner.records.length === 1 && inner.tracks.length === 1 && inner.tracks[0].pts.length >= 4);
 await p.click('[data-act=qrRec]'); await p.waitForTimeout(400);
