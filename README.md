@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 2.1.0 · **Last updated:** 2026-10-27
+**Version:** 2.2.0 · **Last updated:** 2026-10-27
 
 **Status:** stable · **Offline:** complete
 
@@ -79,10 +79,23 @@ From the Archive: **⬇ Darwin Core** and **⬇ iNaturalist** (CSV, UTF-8, no BO
 - **Darwin Core** (for GBIF / IPT / the GBIF validator): `occurrenceID` (`urn:fieldobserver:<moment>`), `basisOfRecord=HumanObservation`, `occurrenceStatus=present`, `eventDate` (ISO 8601, UTC), `decimalLatitude`, `decimalLongitude`, `geodeticDatum=EPSG:4326`, `coordinateUncertaintyInMeters` (GPS accuracy), `minimumElevationInMeters`/`maximumElevationInMeters` (GPS altitude), `scientificName` (**empty**), `recordedBy` (empty), `occurrenceRemarks` (the note), `associatedMedia` (empty), `datasetName`, `dynamicProperties` (JSON with azimuth, elevation angle, lux, battery).
 - **iNaturalist** reads the first 8 CSV columns **by position** (header names are ignored): Taxon name, Date observed, Description, Place name, Latitude, Longitude, Tags, Geoprivacy. The file follows that order; the date carries the local UTC offset.
 - **Important:** the app does not capture the species, so `scientificName` / “Taxon name” are empty; fill them in (e.g. in a spreadsheet) before uploading, otherwise GBIF/iNaturalist cannot link the observation to a taxon. Notes starting with `=`, `+`, `-`, `@` get a leading apostrophe (spreadsheet formula protection).
-- **Photos: planned.** They are not included in the CSV (they would be huge base64 images, not accepted by GBIF as `associatedMedia`); they stay in the JSON / `.fff.json` export. A Darwin Core archive with the Simple Multimedia extension (ZIP) is not implemented.
+- **Photos: in the ZIP export (v2.2.0), not in the CSV.** They are not included in the CSV (they would be huge base64 images, not accepted by GBIF as `associatedMedia`); they stay in the JSON / `.fff.json` export. A true Darwin Core Archive with the Simple Multimedia extension (meta.xml) is still not implemented; the ZIP export is not one.
 - Compatibility with the external services was tested on the file structure only, not on real uploads; check the result in the GBIF validator / the iNaturalist import page.
 
+## ZIP export with photos and audio (v2.2.0)
+
+From the Archive: **⬇ ZIP + media** produces a ZIP (stored, CRC-32) with `occurrence.csv` (Darwin Core), photos and audio recordings as files in `media/`, and `LEAME-README.txt` (RO + EN). The `associatedMedia` column holds relative paths separated by ` | `. The ZIP was verified with Python's `zipfile` (CRC) and the media bytes by SHA-256 against IndexedDB (`tests/zip-media.test.mjs`).
+
+**Limits (not simulated):**
+- It is NOT a Darwin Core Archive (no `meta.xml`/`eml.xml`); GBIF expects public URLs for multimedia, so relative paths cannot be ingested there directly. Not tested with GBIF.
+- `scientificName` stays empty: the app does not capture the species (it would be a schema change).
+- The plain Darwin Core CSV is unchanged (no media). New labels in fr/it/es/pt/de/hu are machine translations, marked.
+
 ## History / Changelog
+
+### 2.2.0 — 2026-10-27
+- ZIP export with photos and audio as files (not a Darwin Core Archive).
+
 - **2.1.0 — 2026-10-27:** **Darwin Core** (GBIF) export and **iNaturalist** CSV from the Archive (photos: planned); Status/Offline lines; CHANGELOG.md (previous: v2.0.0).
 
 ### 1.3.7 — 2026-10-23

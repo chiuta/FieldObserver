@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 2.1.0 · **Ultima actualizare:** 2026-10-27
+**Versiune:** 2.2.0 · **Ultima actualizare:** 2026-10-27
 
 **Stare:** stabil · **Offline:** complet
 
@@ -83,10 +83,23 @@ Din Arhivă: **⬇ Darwin Core** și **⬇ iNaturalist** (CSV, UTF-8, fără BOM
 - **Darwin Core** (pentru GBIF / IPT / validatorul GBIF): `occurrenceID` (`urn:fieldobserver:<moment>`), `basisOfRecord=HumanObservation`, `occurrenceStatus=present`, `eventDate` (ISO 8601, UTC), `decimalLatitude`, `decimalLongitude`, `geodeticDatum=EPSG:4326`, `coordinateUncertaintyInMeters` (acuratețea GPS), `minimumElevationInMeters`/`maximumElevationInMeters` (altitudinea GPS), `scientificName` (**gol**), `recordedBy` (gol), `occurrenceRemarks` (nota), `associatedMedia` (gol), `datasetName`, `dynamicProperties` (JSON cu azimut, unghi de elevație, lux, baterie).
 - **iNaturalist** importă din CSV primele 8 coloane **după poziție** (numele antetului e ignorat): Taxon name, Date observed, Description, Place name, Latitude, Longitude, Tags, Geoprivacy. Fișierul respectă ordinea; data are decalajul orar local.
 - **Important:** aplicația nu captează specia, deci `scientificName` / „Taxon name” sunt goale; completează-le (de ex. într-un tabel) înainte de încărcare, altfel GBIF/iNaturalist nu pot lega observația de un taxon. Notele care încep cu `=`, `+`, `-`, `@` primesc un apostrof în față (protecție împotriva formulelor din foile de calcul).
-- **Fotografii: planificat.** Nu sunt incluse în CSV (ar fi imagini base64 uriașe, neacceptate de GBIF ca `associatedMedia`); rămân în exportul JSON / `.fff.json`. O arhivă Darwin Core cu extensia Simple Multimedia (ZIP) este neimplementată.
+- **Fotografii: în exportul ZIP (v2.2.0), nu în CSV.** Nu sunt incluse în CSV (ar fi imagini base64 uriașe, neacceptate de GBIF ca `associatedMedia`); rămân în exportul JSON / `.fff.json`. O adevărată arhivă Darwin Core cu extensia Simple Multimedia (meta.xml) rămâne neimplementată; exportul ZIP nu este una.
 - Compatibilitatea cu serviciile externe este testată doar pe structura fișierului, nu pe încărcări reale; verifică rezultatul în validatorul GBIF / în pagina de import iNaturalist.
 
+## Export ZIP cu fotografii și audio (v2.2.0)
+
+Din Arhivă: **⬇ ZIP + media** produce un ZIP (fără compresie, CRC-32) cu `occurrence.csv` (Darwin Core), fotografiile și înregistrările audio ca fișiere în `media/` și `LEAME-README.txt` (RO + EN). Coloana `associatedMedia` conține căile relative, separate prin ` | `. ZIP-ul a fost verificat cu `zipfile` din Python (CRC) și octeții media cu SHA-256 față de IndexedDB (`tests/zip-media.test.mjs`).
+
+**Limite (nu simulate):**
+- NU este o arhivă Darwin Core (fără `meta.xml`/`eml.xml`); GBIF cere URL-uri publice pentru multimedia, deci căile relative nu se încarcă direct acolo. Nu a fost testat cu GBIF.
+- `scientificName` rămâne gol: aplicația nu captează specia (ar fi o schimbare de schemă).
+- CSV-ul simplu Darwin Core rămâne neschimbat (fără media). Etichetele noi în fr/it/es/pt/de/hu = traducere automată, marcată.
+
 ## Istoric / Changelog
+
+### 2.2.0 — 2026-10-27
+- Export ZIP cu fotografii și audio ca fișiere (nu arhivă Darwin Core).
+
 - **2.1.0 — 2026-10-27:** export **Darwin Core** (GBIF) și CSV pentru **iNaturalist** din Arhivă (fotografiile: planificat); linii Stare/Offline; CHANGELOG.md (anterior: v2.0.0).
 
 ### 1.3.7 — 2026-10-23
