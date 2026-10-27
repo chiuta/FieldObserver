@@ -2,7 +2,9 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 2.0.0 · **Last updated:** 2026-10-26
+**Version:** 2.1.0 · **Last updated:** 2026-10-27
+
+**Status:** stable · **Offline:** complete
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -70,7 +72,18 @@ Modules embedded in `index.html`: `core`, `label`, `bundle`, `qr` (QR code gener
 
 Download `index.html` and open it via `localhost` (e.g. `python3 -m http.server 8080`) or from an HTTPS host; the sensors and camera require a secure context. No internet required. Sensor availability depends on the device and the browser.
 
+## Darwin Core (GBIF) and iNaturalist export
+
+From the Archive: **⬇ Darwin Core** and **⬇ iNaturalist** (CSV, UTF-8, no BOM).
+
+- **Darwin Core** (for GBIF / IPT / the GBIF validator): `occurrenceID` (`urn:fieldobserver:<moment>`), `basisOfRecord=HumanObservation`, `occurrenceStatus=present`, `eventDate` (ISO 8601, UTC), `decimalLatitude`, `decimalLongitude`, `geodeticDatum=EPSG:4326`, `coordinateUncertaintyInMeters` (GPS accuracy), `minimumElevationInMeters`/`maximumElevationInMeters` (GPS altitude), `scientificName` (**empty**), `recordedBy` (empty), `occurrenceRemarks` (the note), `associatedMedia` (empty), `datasetName`, `dynamicProperties` (JSON with azimuth, elevation angle, lux, battery).
+- **iNaturalist** reads the first 8 CSV columns **by position** (header names are ignored): Taxon name, Date observed, Description, Place name, Latitude, Longitude, Tags, Geoprivacy. The file follows that order; the date carries the local UTC offset.
+- **Important:** the app does not capture the species, so `scientificName` / “Taxon name” are empty; fill them in (e.g. in a spreadsheet) before uploading, otherwise GBIF/iNaturalist cannot link the observation to a taxon. Notes starting with `=`, `+`, `-`, `@` get a leading apostrophe (spreadsheet formula protection).
+- **Photos: planned.** They are not included in the CSV (they would be huge base64 images, not accepted by GBIF as `associatedMedia`); they stay in the JSON / `.fff.json` export. A Darwin Core archive with the Simple Multimedia extension (ZIP) is not implemented.
+- Compatibility with the external services was tested on the file structure only, not on real uploads; check the result in the GBIF validator / the iNaturalist import page.
+
 ## History / Changelog
+- **2.1.0 — 2026-10-27:** **Darwin Core** (GBIF) export and **iNaturalist** CSV from the Archive (photos: planned); Status/Offline lines; CHANGELOG.md (previous: v2.0.0).
 
 ### 1.3.7 — 2026-10-23
 
