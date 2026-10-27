@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 2.0.0 · **Zuletzt aktualisiert:** 2026-10-26
+**Version:** 2.1.0 · **Zuletzt aktualisiert:** 2026-10-27
+
+**Status:** stabil · **Offline:** vollständig
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -70,7 +72,18 @@ In `index.html` eingebettete Module: `core`, `label`, `bundle`, `qr` (QR-Code-Ge
 
 Lade `index.html` herunter und öffne sie über `localhost` (z. B. `python3 -m http.server 8080`) oder von einem HTTPS-Host; Sensoren und Kamera erfordern einen sicheren Kontext. Kein Internet erforderlich. Die Verfügbarkeit der Sensoren hängt vom Gerät und vom Browser ab.
 
+## Darwin-Core-Export (GBIF) und iNaturalist
+
+Im Archiv: **⬇ Darwin Core** und **⬇ iNaturalist** (CSV, UTF-8, ohne BOM).
+
+- **Darwin Core** (für GBIF / IPT / den GBIF-Validator): `occurrenceID` (`urn:fieldobserver:<Zeitpunkt>`), `basisOfRecord=HumanObservation`, `occurrenceStatus=present`, `eventDate` (ISO 8601, UTC), `decimalLatitude`, `decimalLongitude`, `geodeticDatum=EPSG:4326`, `coordinateUncertaintyInMeters` (GPS-Genauigkeit), `minimumElevationInMeters`/`maximumElevationInMeters` (GPS-Höhe), `scientificName` (**leer**), `recordedBy` (leer), `occurrenceRemarks` (die Notiz), `associatedMedia` (leer), `datasetName`, `dynamicProperties` (JSON mit Azimut, Elevationswinkel, Lux, Akku).
+- **iNaturalist** liest die ersten 8 CSV-Spalten **nach Position** (Kopfzeilennamen werden ignoriert): Taxon name, Date observed, Description, Place name, Latitude, Longitude, Tags, Geoprivacy. Die Datei hält diese Reihenfolge ein; das Datum trägt den lokalen Zeitversatz.
+- **Wichtig:** Die App erfasst die Art nicht, daher sind `scientificName` / „Taxon name“ leer; ergänze sie (z. B. in einer Tabellenkalkulation) vor dem Hochladen, sonst können GBIF/iNaturalist die Beobachtung keinem Taxon zuordnen. Notizen, die mit `=`, `+`, `-`, `@` beginnen, erhalten ein Apostroph davor (Schutz vor Tabellenformeln).
+- **Fotos: geplant.** Sie sind nicht im CSV enthalten (riesige Base64-Bilder, von GBIF nicht als `associatedMedia` akzeptiert); sie bleiben im JSON-/`.fff.json`-Export. Ein Darwin-Core-Archiv mit der Erweiterung Simple Multimedia (ZIP) ist nicht implementiert.
+- Die Kompatibilität mit den externen Diensten wurde nur an der Dateistruktur getestet, nicht mit echten Uploads; prüfe das Ergebnis im GBIF-Validator / auf der iNaturalist-Importseite.
+
 ## Verlauf / Changelog
+- **2.1.0 — 2026-10-27:** **Darwin-Core**-Export (GBIF) und **iNaturalist**-CSV aus dem Archiv (Fotos: geplant); Status/Offline-Zeilen; CHANGELOG.md (vorherige: v2.0.0).
 
 ### 1.3.7 — 2026-10-23
 

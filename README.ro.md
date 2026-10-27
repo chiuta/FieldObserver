@@ -2,7 +2,9 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 2.0.0 · **Ultima actualizare:** 2026-10-26
+**Versiune:** 2.1.0 · **Ultima actualizare:** 2026-10-27
+
+**Stare:** stabil · **Offline:** complet
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -74,7 +76,18 @@ Module lipite în `index.html`: `core`, `label`, `bundle`, `qr` (generator de co
 
 Descărcați `index.html` și deschideți-l prin `localhost` (de ex. `python3 -m http.server 8080`) sau de pe un host HTTPS; senzorii și camera cer un context sigur. Nu necesită internet. Disponibilitatea senzorilor depinde de dispozitiv și de browser.
 
+## Export Darwin Core (GBIF) și iNaturalist
+
+Din Arhivă: **⬇ Darwin Core** și **⬇ iNaturalist** (CSV, UTF-8, fără BOM).
+
+- **Darwin Core** (pentru GBIF / IPT / validatorul GBIF): `occurrenceID` (`urn:fieldobserver:<moment>`), `basisOfRecord=HumanObservation`, `occurrenceStatus=present`, `eventDate` (ISO 8601, UTC), `decimalLatitude`, `decimalLongitude`, `geodeticDatum=EPSG:4326`, `coordinateUncertaintyInMeters` (acuratețea GPS), `minimumElevationInMeters`/`maximumElevationInMeters` (altitudinea GPS), `scientificName` (**gol**), `recordedBy` (gol), `occurrenceRemarks` (nota), `associatedMedia` (gol), `datasetName`, `dynamicProperties` (JSON cu azimut, unghi de elevație, lux, baterie).
+- **iNaturalist** importă din CSV primele 8 coloane **după poziție** (numele antetului e ignorat): Taxon name, Date observed, Description, Place name, Latitude, Longitude, Tags, Geoprivacy. Fișierul respectă ordinea; data are decalajul orar local.
+- **Important:** aplicația nu captează specia, deci `scientificName` / „Taxon name” sunt goale; completează-le (de ex. într-un tabel) înainte de încărcare, altfel GBIF/iNaturalist nu pot lega observația de un taxon. Notele care încep cu `=`, `+`, `-`, `@` primesc un apostrof în față (protecție împotriva formulelor din foile de calcul).
+- **Fotografii: planificat.** Nu sunt incluse în CSV (ar fi imagini base64 uriașe, neacceptate de GBIF ca `associatedMedia`); rămân în exportul JSON / `.fff.json`. O arhivă Darwin Core cu extensia Simple Multimedia (ZIP) este neimplementată.
+- Compatibilitatea cu serviciile externe este testată doar pe structura fișierului, nu pe încărcări reale; verifică rezultatul în validatorul GBIF / în pagina de import iNaturalist.
+
 ## Istoric / Changelog
+- **2.1.0 — 2026-10-27:** export **Darwin Core** (GBIF) și CSV pentru **iNaturalist** din Arhivă (fotografiile: planificat); linii Stare/Offline; CHANGELOG.md (anterior: v2.0.0).
 
 ### 1.3.7 — 2026-10-23
 

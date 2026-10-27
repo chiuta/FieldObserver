@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 2.0.0 · **Utolsó frissítés:** 2026-10-26
+**Verzió:** 2.1.0 · **Utolsó frissítés:** 2026-10-27
+
+**Állapot:** stabil · **Offline:** teljes
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -70,7 +72,18 @@ Az `index.html` fájlba beágyazott modulok: `core`, `label`, `bundle`, `qr` (QR
 
 Töltsd le az `index.html` fájlt, és nyisd meg `localhost`-on keresztül (pl. `python3 -m http.server 8080`) vagy HTTPS-gazdagépről; a szenzorokhoz és a kamerához biztonságos környezet kell. Internet nem szükséges. A szenzorok elérhetősége az eszköztől és a böngészőtől függ.
 
+## Darwin Core (GBIF) és iNaturalist export
+
+Az Archívumból: **⬇ Darwin Core** és **⬇ iNaturalist** (CSV, UTF-8, BOM nélkül).
+
+- **Darwin Core** (GBIF / IPT / GBIF-validátor számára): `occurrenceID` (`urn:fieldobserver:<időpont>`), `basisOfRecord=HumanObservation`, `occurrenceStatus=present`, `eventDate` (ISO 8601, UTC), `decimalLatitude`, `decimalLongitude`, `geodeticDatum=EPSG:4326`, `coordinateUncertaintyInMeters` (GPS-pontosság), `minimumElevationInMeters`/`maximumElevationInMeters` (GPS-magasság), `scientificName` (**üres**), `recordedBy` (üres), `occurrenceRemarks` (a jegyzet), `associatedMedia` (üres), `datasetName`, `dynamicProperties` (JSON: azimut, magassági szög, lux, akkumulátor).
+- Az **iNaturalist** a CSV első 8 oszlopát **pozíció alapján** olvassa (a fejléc nevét figyelmen kívül hagyja): Taxon name, Date observed, Description, Place name, Latitude, Longitude, Tags, Geoprivacy. A fájl ezt a sorrendet követi; a dátum a helyi időzóna-eltolást hordozza.
+- **Fontos:** az alkalmazás nem rögzíti a fajt, ezért a `scientificName` / „Taxon name” üres; töltse ki (pl. táblázatkezelőben) feltöltés előtt, különben a GBIF/iNaturalist nem tudja taxonhoz kötni a megfigyelést. A `=`, `+`, `-`, `@` jellel kezdődő jegyzetek elé aposztróf kerül (képletek elleni védelem).
+- **Fotók: tervezett.** Nem szerepelnek a CSV-ben (hatalmas base64 képek, a GBIF nem fogadja el `associatedMedia`-ként); a JSON / `.fff.json` exportban maradnak. A Simple Multimedia bővítményes Darwin Core archívum (ZIP) nincs megvalósítva.
+- A külső szolgáltatásokkal való kompatibilitást csak a fájlszerkezeten teszteltük, valódi feltöltésen nem; ellenőrizze az eredményt a GBIF-validátorban / az iNaturalist importoldalán.
+
 ## Előzmények / Changelog
+- **2.1.0 — 2026-10-27:** **Darwin Core** (GBIF) export és **iNaturalist** CSV az Archívumból (fotók: tervezett); Állapot/Offline sorok; CHANGELOG.md (előző: v2.0.0).
 
 ### 1.3.7 — 2026-10-23
 
