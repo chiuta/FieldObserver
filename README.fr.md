@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 2.1.0 · **Dernière mise à jour :** 2026-10-27
+**Version :** 2.2.0 · **Dernière mise à jour :** 2026-10-27
 
 **État:** stable · **Hors ligne:** complet
 
@@ -82,7 +82,22 @@ Depuis l’Archive : **⬇ Darwin Core** et **⬇ iNaturalist** (CSV, UTF-8, san
 - **Photos : prévu.** Elles ne sont pas incluses dans le CSV (images base64 énormes, non acceptées par GBIF comme `associatedMedia`) ; elles restent dans l’export JSON / `.fff.json`. Une archive Darwin Core avec l’extension Simple Multimedia (ZIP) n’est pas implémentée.
 - La compatibilité avec les services externes a été testée sur la structure du fichier seulement, pas sur de vrais envois ; vérifiez le résultat dans le validateur GBIF / la page d’import iNaturalist.
 
+## ZIP export with photos and audio (v2.2.0)
+
+_(English only; not yet translated into this language. Machine translation intentionally not added to avoid errors in technical statements.)_
+
+From the Archive: **⬇ ZIP + media** produces a ZIP (stored, CRC-32) with `occurrence.csv` (Darwin Core), photos and audio recordings as files in `media/`, and `LEAME-README.txt` (RO + EN). The `associatedMedia` column holds relative paths separated by ` | `. The ZIP was verified with Python's `zipfile` (CRC) and the media bytes by SHA-256 against IndexedDB (`tests/zip-media.test.mjs`).
+
+**Limits (not simulated):**
+- It is NOT a Darwin Core Archive (no `meta.xml`/`eml.xml`); GBIF expects public URLs for multimedia, so relative paths cannot be ingested there directly. Not tested with GBIF.
+- `scientificName` stays empty: the app does not capture the species (it would be a schema change).
+- The plain Darwin Core CSV is unchanged (no media). New labels in fr/it/es/pt/de/hu are machine translations, marked.
+
 ## Historique / Changelog
+
+### 2.2.0 — 2026-10-27
+- ZIP export with photos and audio as files (not a Darwin Core Archive).
+
 - **2.1.0 — 2026-10-27 :** export **Darwin Core** (GBIF) et CSV **iNaturalist** depuis l’Archive (photos : prévu) ; lignes État/Hors ligne ; CHANGELOG.md (précédente : v2.0.0).
 
 ### 1.3.7 — 2026-10-23

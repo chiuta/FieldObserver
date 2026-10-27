@@ -2,6 +2,16 @@
 
 Format: [SemVer](https://semver.org/lang/ro/) MAJOR.MINOR.PATCH.
 
+## 2.2.0 — 2026-10-27 (anterior: 2.1.0)
+
+Fotografii și audio în export:
+- Buton nou „⬇ ZIP + media” în Arhivă: ZIP „store” (CRC-32), cu `occurrence.csv` Darwin Core, fotografiile și audio ca fișiere în `media/`, `LEAME-README.txt` (RO + EN); `associatedMedia` cu căi relative separate prin ` | `.
+- Verificat cu `zipfile` din Python (CRC) și SHA-256 al octeților media față de IndexedDB; test nou `tests/zip-media.test.mjs`.
+- Limite documentate: nu e arhivă Darwin Core (fără meta.xml), GBIF cere URL-uri publice, netestat cu GBIF; `scientificName` rămâne gol (specia nu e captată). Traduceri noi fr/it/es/pt/de/hu = automate, marcate.
+- CSV-ul Darwin Core simplu și iNaturalist: neschimbate.
+
+---
+
 ## 2.1.0 — 2026-10-27 (anterior: v2.0.0)
 
 Stare: stabil · Offline: complet
