@@ -2,6 +2,14 @@
 
 Format: [SemVer](https://semver.org/lang/ro/) MAJOR.MINOR.PATCH.
 
+## 2.2.1 — 2026-10-28 (anterior: 2.2.0)
+
+Corectat:
+- Export „ZIP + media”: numele fișierelor din `media/` pot coincide când ID-urile rândurilor diferă doar prin caractere înlocuite cu `_` (ex. `x:1` și `x_1`) sau doar prin majuscule/minuscule (`CASE-1` / `case-1`). Rezultatul avea două intrări cu același nume în ZIP (o fotografie o suprascria pe cealaltă la extragere, iar ambele rânduri CSV indicau aceeași cale) sau fișiere care se suprapun pe Windows/macOS. Numele sunt acum unice fără a ține seama de majuscule (sufix `_2`, `_3`…). Descoperit cu un verificator independent (Python `zipfile`/`csv`).
+
+Teste:
+- Test nou `tests/zip-independent.test.mjs` + `tests/verify_zip.py` (doar biblioteca standard Python și `unzip -t`) și `tests/fixtures/app-generated-zip-media.zip` (ZIP produs de codul aplicației; sintetic). Nu s-a adăugat `meta.xml`: schema XSD TDWG nu a putut fi obținută pentru validare (vezi `tests/fixtures/README.md`).
+
 ## 2.2.0 — 2026-10-27 (anterior: 2.1.0)
 
 Fotografii și audio în export:
