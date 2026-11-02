@@ -21,8 +21,8 @@
     "fieldobserver.arhiva",
     "fieldobserver.lang.v1"
   ],
-  "sizeBytes": 405686,
-  "sha256": "113dbae533654775a8f405d96cea2dd479201c3e4c9fe55818d5d9b979143904",
+  "sizeBytes": 502334,
+  "sha256": "176e23842de45eced44d68b1b29a7e05ca9025c66111400e3c95c7704552bec2",
   "csp": {
     "present": true,
     "directives": {
@@ -66,6 +66,9 @@
       "label",
       "bundle",
       "qr",
+      "p2p",
+      "sync",
+      "history",
       "bridge"
     ]
   },
@@ -78,6 +81,9 @@
       "label",
       "bundle",
       "qr",
+      "p2p",
+      "sync",
+      "history",
       "bridge"
     ]
   },
