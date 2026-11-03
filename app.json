@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "slug": "fieldobserver",
-  "name": "ASFAN · Field Observer v2.3.0",
-  "version": "2.3.0",
-  "updated": "2026-11-02",
+  "name": "' + xml(tr('pt', { i: i + 1, t: e.title, lat: e.lat, lon: e.lon })) + '",
+  "version": "2.3.1",
+  "updated": "2026-11-03",
   "description": "Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră, NFC și rapoarte salvate local.",
   "egress": [],
   "permissions": [
@@ -15,14 +15,16 @@
     "clipboard",
     "serviceWorker",
     "indexedDB",
-    "localStorage"
+    "localStorage",
+    "Web Crypto",
+    "BroadcastChannel"
   ],
   "storageKeys": [
     "fieldobserver.arhiva",
     "fieldobserver.lang.v1"
   ],
-  "sizeBytes": 502334,
-  "sha256": "176e23842de45eced44d68b1b29a7e05ca9025c66111400e3c95c7704552bec2",
+  "sizeBytes": 572321,
+  "sha256": "bba6178d85c319531fc4b85e7ea67b4412313a9367b107e2358c889025651657",
   "csp": {
     "present": true,
     "directives": {
@@ -35,7 +37,7 @@
       "base-uri": "'self'",
       "form-action": "'self'",
       "worker-src": "'self' blob:",
-      "script-src": "'self' blob: sha256×6",
+      "script-src": "'self' blob: sha256×9",
       "connect-src": "'self'",
       "manifest-src": "'self'"
     },
