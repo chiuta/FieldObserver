@@ -17,14 +17,15 @@
     "indexedDB",
     "localStorage",
     "Web Crypto",
+    "WebGL",
     "BroadcastChannel"
   ],
   "storageKeys": [
     "fieldobserver.arhiva",
     "fieldobserver.lang.v1"
   ],
-  "sizeBytes": 626431,
-  "sha256": "dbcacff4f1c4ea5a14ea523a98124ecc2633035ebf3629273a66256dc1c7a5f1",
+  "sizeBytes": 678087,
+  "sha256": "c1bb91de4396fc6bf10cfefb2457aa5e3df22686e8cd6fe7af7b2074a0f64fee",
   "csp": {
     "present": true,
     "directives": {
@@ -37,7 +38,7 @@
       "base-uri": "'self'",
       "form-action": "'self'",
       "worker-src": "'self' blob:",
-      "script-src": "'self' blob: sha256×9",
+      "script-src": "'self' blob: sha256×10",
       "connect-src": "'self'",
       "manifest-src": "'self'"
     },
