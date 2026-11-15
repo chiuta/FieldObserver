@@ -2,7 +2,7 @@
   "schema": 1,
   "slug": "fieldobserver",
   "name": "' + xml(tr('pt', { i: i + 1, t: e.title, lat: e.lat, lon: e.lon })) + '",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "updated": "2026-11-15",
   "description": "Observator de teren pe telefon: GPS, busolă, mișcare, lumină, sunet, cameră, NFC și rapoarte salvate local.",
   "egress": [],
@@ -24,8 +24,8 @@
     "fieldobserver.arhiva",
     "fieldobserver.lang.v1"
   ],
-  "sizeBytes": 721478,
-  "sha256": "da48cd806ab4e0a457bc3b015ba5687cd87a9390e36c858e0f0088d64f621482",
+  "sizeBytes": 739514,
+  "sha256": "2436dfbd05e31c1b985f07a719da23b8f7f3293d2583060d407dd1db93f27761",
   "csp": {
     "present": true,
     "directives": {
@@ -69,6 +69,7 @@
       "exit",
       "view",
       "a11y",
+      "share",
       "ux",
       "label",
       "bundle",
@@ -80,7 +81,7 @@
     ]
   },
   "kit": {
-    "version": "1.6.0",
+    "version": "1.7.0",
     "modules": [
       "core",
       "store",
@@ -88,6 +89,7 @@
       "exit",
       "view",
       "a11y",
+      "share",
       "ux",
       "label",
       "bundle",
